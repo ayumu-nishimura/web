@@ -7,6 +7,7 @@
 </head>
 <body>
     <button id="brightnessButton">明るさを調整する</button>
+    <button id="resetBrightness">輝度を元に戻す</button>
 
     <script>
         document.getElementById('brightnessButton').addEventListener('click', function() {
@@ -17,6 +18,19 @@
             } else if (typeof window.androidInterface !== 'undefined' &&
                        typeof window.androidInterface.brightness !== 'undefined') {
                 window.androidInterface.brightness(1);
+            } else {
+                alert('ネイティブインターフェースが見つかりませんでした。');
+            }
+        });
+
+        document.getElementById('resetBrightness').addEventListener('click', function() {
+            if (typeof window.webkit !== 'undefined' &&
+                typeof window.webkit.messageHandlers !== 'undefined' &&
+                typeof window.webkit.messageHandlers.brightness !== 'undefined') {
+                window.webkit.messageHandlers.brightness.postMessage(0);
+            } else if (typeof window.androidInterface !== 'undefined' &&
+                       typeof window.androidInterface.brightness !== 'undefined') {
+                window.androidInterface.brightness(0);
             } else {
                 alert('ネイティブインターフェースが見つかりませんでした。');
             }
