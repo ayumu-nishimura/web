@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Amazon Pay</h1>
+    <a href="https://jsfiddle.net/suy5r7jg/7/">https://jsfiddle.net/suy5r7jg/7/</a>
+
+    <script>
+        window.onload = function() {
+            console.log("aaaa");
+            var object = {
+                    "action": "login",
+                "callbackURL": "https://example.com?a=a&b=b",
+                "demo": "false"
+            }
+            webkit.messageHandlers.amazonPay.postMessage(object); 
+        }
+    </script>
+</body>
+</html>
