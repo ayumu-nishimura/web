@@ -192,7 +192,7 @@
         if (typeof window.webkit !== 'undefined' &&
             typeof window.webkit.messageHandlers !== 'undefined' &&
             typeof window.webkit.messageHandlers.autocomplete !== 'undefined') {
-          window.webkit.messageHandlers.autocomplete.postMessage({'https://ayumu-nishimura.github.io': queryString });
+          window.webkit.messageHandlers.autocomplete.postMessage({'https://ayumu-nishimura.github.io/web/autocomplete.html': queryString });
         } else {
           alert('ネイティブインターフェースが見つかりませんでした。');
         }
