@@ -1,90 +1,299 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ScriptMessageHandler</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ScriptMessageHandler</title>
+
+  <style>
+    :root {
+      --bg-1: #eef2ff;
+      --bg-2: #f8fafc;
+      --card: rgba(255, 255, 255, 0.82);
+      --text: #1e293b;
+      --muted: #64748b;
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --success: #10b981;
+      --error: #ef4444;
+      --border: rgba(148, 163, 184, 0.25);
+      --shadow: 0 20px 50px rgba(15, 23, 42, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, #c7d2fe 0, transparent 36%),
+        radial-gradient(circle at bottom right, #bae6fd 0, transparent 34%),
+        linear-gradient(135deg, var(--bg-1), var(--bg-2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 520px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 13px;
+      backdrop-filter: blur(12px);
+    }
+
+    .header h1 {
+      margin: 16px 0 8px;
+      font-size: clamp(28px, 7vw, 40px);
+      letter-spacing: -0.04em;
+    }
+
+    .header p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 15px;
+    }
+
+    .card {
+      padding: 22px;
+      border-radius: 28px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+      margin-top: 16px;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .icon {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      background: #eef2ff;
+      font-size: 22px;
+    }
+
+    .section-title h2 {
+      margin: 0;
+      font-size: 20px;
+      letter-spacing: -0.02em;
+    }
+
+    .section-title span {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .button-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    button {
+      width: 100%;
+      border: none;
+      border-radius: 18px;
+      padding: 16px 18px;
+      font-size: 16px;
+      font-weight: 700;
+      color: white;
+      cursor: pointer;
+      transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease,
+        filter 0.15s ease;
+      box-shadow: 0 10px 24px rgba(99, 102, 241, 0.26);
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button:active {
+      transform: scale(0.98);
+      box-shadow: none;
+    }
+
+    button:hover {
+      filter: brightness(1.04);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    }
+
+    .btn-secondary {
+      color: var(--primary-dark);
+      background: #eef2ff;
+      box-shadow: none;
+    }
+
+    .btn-light {
+      background: linear-gradient(135deg, #38bdf8, #6366f1);
+    }
+
+    .btn-success {
+      background: linear-gradient(135deg, #34d399, var(--success));
+      box-shadow: 0 10px 24px rgba(16, 185, 129, 0.24);
+    }
+
+    .btn-error {
+      background: linear-gradient(135deg, #fb7185, var(--error));
+      box-shadow: 0 10px 24px rgba(239, 68, 68, 0.24);
+    }
+
+    @media (min-width: 480px) {
+      .button-grid.two {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .button-grid.three {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+  </style>
 </head>
+
 <body>
-    <h1>輝度調整</h1>
-    <button id="brightnessButton">明るさを調整する</button>
-    <button id="resetBrightness">輝度を元に戻す</button>
+  <main class="container">
+    <div class="header">
+      <div class="header-badge">Native Bridge Demo</div>
+      <h1>Script Message Handler</h1>
+      <p>WebView からネイティブ機能を呼び出すサンプルです。</p>
+    </div>
 
-    <br>
+    <section class="card">
+      <div class="section-title">
+        <div class="icon">☀️</div>
+        <div>
+          <h2>輝度調整</h2>
+          <span>画面の明るさを変更します</span>
+        </div>
+      </div>
 
-    <h1>ハプティクス</h1>
-    <button id="lightImpact">lightImpact</button>
-    <button id="success">success</button>
-    <button id="error">error</button>
+      <div class="button-grid two">
+        <button id="brightnessButton" class="btn-primary">
+          明るくする
+        </button>
 
-    <script>
-        // 輝度
-        document.getElementById('brightnessButton').addEventListener('click', function() {
-            if (typeof window.webkit !== 'undefined' &&
-                typeof window.webkit.messageHandlers !== 'undefined' &&
-                typeof window.webkit.messageHandlers.brightness !== 'undefined') {
-                window.webkit.messageHandlers.brightness.postMessage(1);
-            } else if (typeof window.androidInterface !== 'undefined' &&
-                       typeof window.androidInterface.brightness !== 'undefined') {
-                window.androidInterface.brightness(1);
-            } else {
-                alert('ネイティブインターフェースが見つかりませんでした。');
-            }
-        });
+        <button id="resetBrightness" class="btn-secondary">
+          元に戻す
+        </button>
+      </div>
+    </section>
 
-        document.getElementById('resetBrightness').addEventListener('click', function() {
-            if (typeof window.webkit !== 'undefined' &&
-                typeof window.webkit.messageHandlers !== 'undefined' &&
-                typeof window.webkit.messageHandlers.brightness !== 'undefined') {
-                window.webkit.messageHandlers.brightness.postMessage(0);
-            } else if (typeof window.androidInterface !== 'undefined' &&
-                       typeof window.androidInterface.brightness !== 'undefined') {
-                window.androidInterface.brightness(0);
-            } else {
-                alert('ネイティブインターフェースが見つかりませんでした。');
-            }
-        });
+    <section class="card">
+      <div class="section-title">
+        <div class="icon">📳</div>
+        <div>
+          <h2>ハプティクス</h2>
+          <span>端末の振動フィードバックを実行します</span>
+        </div>
+      </div>
 
+      <div class="button-grid three">
+        <button id="lightImpact" class="btn-light">
+          Light
+        </button>
 
-        // ハプティクス
-        document.getElementById('lightImpact').addEventListener('click', function() {
-            if (typeof window.webkit !== 'undefined' &&
-                typeof window.webkit.messageHandlers !== 'undefined' &&
-                typeof window.webkit.messageHandlers.haptic !== 'undefined') {
-                window.webkit.messageHandlers.haptic.postMessage({feedbackType: success});
-            } else if (typeof window.androidInterface !== 'undefined' &&
-                       typeof window.androidInterface.haptics !== 'undefined') {
-                window.androidInterface.haptics("lightImpact");
-            } else {
-                alert('ネイティブインターフェースが見つかりませんでした。');
-            }
-        });
+        <button id="success" class="btn-success">
+          Success
+        </button>
 
-        document.getElementById('success').addEventListener('click', function() {
-            if (typeof window.webkit !== 'undefined' &&
-                typeof window.webkit.messageHandlers !== 'undefined' &&
-                typeof window.webkit.messageHandlers.haptic !== 'undefined') {
-                window.webkit.messageHandlers.haptic.postMessage({feedbackType: success});
-            } else if (typeof window.androidInterface !== 'undefined' &&
-                       typeof window.androidInterface.haptics !== 'undefined') {
-                window.androidInterface.haptics("success");
-            } else {
-                alert('ネイティブインターフェースが見つかりませんでした。');
-            }
-        });
+        <button id="error" class="btn-error">
+          Error
+        </button>
+      </div>
+    </section>
+  </main>
 
-        document.getElementById('error').addEventListener('click', function() {
-            if (typeof window.webkit !== 'undefined' &&
-                typeof window.webkit.messageHandlers !== 'undefined' &&
-                typeof window.webkit.messageHandlers.haptic !== 'undefined') {
-                window.webkit.messageHandlers.haptic.postMessage({feedbackType: error});
-            } else if (typeof window.androidInterface !== 'undefined' &&
-                       typeof window.androidInterface.haptics !== 'undefined') {
-                window.androidInterface.haptics("error");
-            } else {
-                alert('ネイティブインターフェースが見つかりませんでした。');
-            }
-        });
-    </script>
+  <script>
+    function showNativeInterfaceError() {
+      alert('ネイティブインターフェースが見つかりませんでした。');
+    }
+
+    function postBrightness(value) {
+      if (
+        typeof window.webkit !== 'undefined' &&
+        typeof window.webkit.messageHandlers !== 'undefined' &&
+        typeof window.webkit.messageHandlers.brightness !== 'undefined'
+      ) {
+        window.webkit.messageHandlers.brightness.postMessage(value);
+      } else if (
+        typeof window.androidInterface !== 'undefined' &&
+        typeof window.androidInterface.brightness !== 'undefined'
+      ) {
+        window.androidInterface.brightness(value);
+      } else {
+        showNativeInterfaceError();
+      }
+    }
+
+    function postHaptic(feedbackType) {
+      if (
+        typeof window.webkit !== 'undefined' &&
+        typeof window.webkit.messageHandlers !== 'undefined' &&
+        typeof window.webkit.messageHandlers.haptic !== 'undefined'
+      ) {
+        window.webkit.messageHandlers.haptic.postMessage({ feedbackType });
+      } else if (
+        typeof window.androidInterface !== 'undefined' &&
+        typeof window.androidInterface.haptics !== 'undefined'
+      ) {
+        window.androidInterface.haptics(feedbackType);
+      } else {
+        showNativeInterfaceError();
+      }
+    }
+
+    document.getElementById('brightnessButton').addEventListener('click', function () {
+      postBrightness(1);
+    });
+
+    document.getElementById('resetBrightness').addEventListener('click', function () {
+      postBrightness(0);
+    });
+
+    document.getElementById('lightImpact').addEventListener('click', function () {
+      postHaptic('lightImpact');
+    });
+
+    document.getElementById('success').addEventListener('click', function () {
+      postHaptic('success');
+    });
+
+    document.getElementById('error').addEventListener('click', function () {
+      postHaptic('error');
+    });
+  </script>
 </body>
 </html>
