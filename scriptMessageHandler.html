@@ -6,10 +6,19 @@
     <title>ScriptMessageHandler</title>
 </head>
 <body>
+    <h1>輝度調整</h1>
     <button id="brightnessButton">明るさを調整する</button>
     <button id="resetBrightness">輝度を元に戻す</button>
 
+    <br>
+
+    <h1>ハプティクス</h1>
+    <button id="lightImpact">lightImpact</button>
+    <button id="success">success</button>
+    <button id="error">error</button>
+
     <script>
+        // 輝度
         document.getElementById('brightnessButton').addEventListener('click', function() {
             if (typeof window.webkit !== 'undefined' &&
                 typeof window.webkit.messageHandlers !== 'undefined' &&
@@ -31,6 +40,47 @@
             } else if (typeof window.androidInterface !== 'undefined' &&
                        typeof window.androidInterface.brightness !== 'undefined') {
                 window.androidInterface.brightness(0);
+            } else {
+                alert('ネイティブインターフェースが見つかりませんでした。');
+            }
+        });
+
+
+        // ハプティクス
+        document.getElementById('lightImpact').addEventListener('click', function() {
+            if (typeof window.webkit !== 'undefined' &&
+                typeof window.webkit.messageHandlers !== 'undefined' &&
+                typeof window.webkit.messageHandlers.haptic !== 'undefined') {
+                window.webkit.messageHandlers.haptic.postMessage({feedbackType: success});
+            } else if (typeof window.androidInterface !== 'undefined' &&
+                       typeof window.androidInterface.haptics !== 'undefined') {
+                window.androidInterface.haptics("lightImpact");`
+            } else {
+                alert('ネイティブインターフェースが見つかりませんでした。');
+            }
+        });
+
+        document.getElementById('success').addEventListener('click', function() {
+            if (typeof window.webkit !== 'undefined' &&
+                typeof window.webkit.messageHandlers !== 'undefined' &&
+                typeof window.webkit.messageHandlers.haptic !== 'undefined') {
+                window.webkit.messageHandlers.haptic.postMessage({feedbackType: success});
+            } else if (typeof window.androidInterface !== 'undefined' &&
+                       typeof window.androidInterface.haptics !== 'undefined') {
+                window.androidInterface.haptics("success");`
+            } else {
+                alert('ネイティブインターフェースが見つかりませんでした。');
+            }
+        });
+
+        document.getElementById('error').addEventListener('click', function() {
+            if (typeof window.webkit !== 'undefined' &&
+                typeof window.webkit.messageHandlers !== 'undefined' &&
+                typeof window.webkit.messageHandlers.haptic !== 'undefined') {
+                window.webkit.messageHandlers.haptic.postMessage({feedbackType: error});
+            } else if (typeof window.androidInterface !== 'undefined' &&
+                       typeof window.androidInterface.haptics !== 'undefined') {
+                window.androidInterface.haptics("error");`
             } else {
                 alert('ネイティブインターフェースが見つかりませんでした。');
             }
