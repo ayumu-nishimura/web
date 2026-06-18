@@ -54,7 +54,7 @@
                 window.webkit.messageHandlers.haptic.postMessage({feedbackType: success});
             } else if (typeof window.androidInterface !== 'undefined' &&
                        typeof window.androidInterface.haptics !== 'undefined') {
-                window.androidInterface.haptics("lightImpact");`
+                window.androidInterface.haptics("lightImpact");
             } else {
                 alert('ネイティブインターフェースが見つかりませんでした。');
             }
@@ -67,7 +67,7 @@
                 window.webkit.messageHandlers.haptic.postMessage({feedbackType: success});
             } else if (typeof window.androidInterface !== 'undefined' &&
                        typeof window.androidInterface.haptics !== 'undefined') {
-                window.androidInterface.haptics("success");`
+                window.androidInterface.haptics("success");
             } else {
                 alert('ネイティブインターフェースが見つかりませんでした。');
             }
@@ -80,7 +80,7 @@
                 window.webkit.messageHandlers.haptic.postMessage({feedbackType: error});
             } else if (typeof window.androidInterface !== 'undefined' &&
                        typeof window.androidInterface.haptics !== 'undefined') {
-                window.androidInterface.haptics("error");`
+                window.androidInterface.haptics("error");
             } else {
                 alert('ネイティブインターフェースが見つかりませんでした。');
             }
