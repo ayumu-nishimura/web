@@ -16,6 +16,7 @@
       --primary-dark: #4f46e5;
       --success: #10b981;
       --error: #ef4444;
+      --warning: #f59e0b;
       --border: rgba(148, 163, 184, 0.25);
       --shadow: 0 20px 50px rgba(15, 23, 42, 0.12);
     }
@@ -34,14 +35,14 @@
         radial-gradient(circle at bottom right, #bae6fd 0, transparent 34%),
         linear-gradient(135deg, var(--bg-1), var(--bg-2));
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: center;
       padding: 24px;
     }
 
     .container {
       width: 100%;
-      max-width: 520px;
+      max-width: 860px;
     }
 
     .header {
@@ -100,6 +101,7 @@
       border-radius: 16px;
       background: #eef2ff;
       font-size: 22px;
+      flex: 0 0 auto;
     }
 
     .section-title h2 {
@@ -113,12 +115,21 @@
       margin-top: 2px;
       color: var(--muted);
       font-size: 13px;
+      line-height: 1.5;
     }
 
     .button-grid {
       display: grid;
       grid-template-columns: 1fr;
       gap: 12px;
+    }
+
+    .button-grid.two {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .haptic-grid {
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
     }
 
     button {
@@ -147,6 +158,13 @@
       filter: brightness(1.04);
     }
 
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.55;
+      transform: none;
+      filter: none;
+    }
+
     .btn-primary {
       background: linear-gradient(135deg, var(--primary), var(--primary-dark));
     }
@@ -171,13 +189,149 @@
       box-shadow: 0 10px 24px rgba(239, 68, 68, 0.24);
     }
 
-    @media (min-width: 480px) {
+    .btn-warning {
+      background: linear-gradient(135deg, #fbbf24, var(--warning));
+      box-shadow: 0 10px 24px rgba(245, 158, 11, 0.24);
+    }
+
+    .btn-muted {
+      color: var(--text);
+      background: linear-gradient(135deg, #e2e8f0, #cbd5e1);
+      box-shadow: none;
+    }
+
+    .haptic-button {
+      min-height: 116px;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .haptic-name {
+      font-size: 14px;
+      line-height: 1.25;
+      overflow-wrap: anywhere;
+    }
+
+    .haptic-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 4px 8px;
+      font-size: 11px;
+      font-weight: 800;
+      background: rgba(255, 255, 255, 0.26);
+      color: rgba(255, 255, 255, 0.94);
+    }
+
+    .btn-muted .pill,
+    .btn-secondary .pill {
+      background: rgba(15, 23, 42, 0.08);
+      color: var(--muted);
+    }
+
+    .haptic-desc {
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 1.45;
+      color: rgba(255, 255, 255, 0.88);
+    }
+
+    .btn-muted .haptic-desc,
+    .btn-secondary .haptic-desc {
+      color: var(--muted);
+    }
+
+    .toolbar {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .toolbar-row {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    input,
+    select {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 13px 14px;
+      font: inherit;
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.72);
+      outline: none;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: rgba(99, 102, 241, 0.6);
+      box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12);
+    }
+
+    .field-label {
+      display: block;
+      margin: 0 0 6px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .notice {
+      margin-top: 12px;
+      padding: 12px 14px;
+      border-radius: 18px;
+      background: rgba(255, 251, 235, 0.78);
+      border: 1px solid rgba(245, 158, 11, 0.24);
+      color: #92400e;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .log {
+      min-height: 92px;
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(15, 23, 42, 0.88);
+      color: #e2e8f0;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 12px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .count {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 10px;
+    }
+
+    @media (min-width: 640px) {
+      .toolbar-row {
+        grid-template-columns: 1fr 180px;
+      }
+    }
+
+    @media (max-width: 479px) {
       .button-grid.two {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: 1fr;
       }
 
-      .button-grid.three {
-        grid-template-columns: repeat(3, 1fr);
+      .card {
+        padding: 18px;
+        border-radius: 24px;
       }
     }
   </style>
@@ -216,63 +370,377 @@
         <div class="icon">📳</div>
         <div>
           <h2>ハプティクス</h2>
-          <span>端末の振動フィードバックを実行します</span>
+          <span>Android 側で定義済みの HapticFeedbackConstants を検証します</span>
         </div>
       </div>
 
-      <div class="button-grid three">
-        <button id="CLOCK_TICK" class="btn-light">
-          CLOCK_TICK
-        </button>
+      <div class="toolbar">
+        <div class="toolbar-row">
+          <div>
+            <label class="field-label" for="hapticSearch">検索</label>
+            <input id="hapticSearch" type="search" placeholder="例: KEYBOARD / API 34 / TOGGLE" />
+          </div>
 
-        <button id="CONTEXT_CLICK" class="btn-success">
-          CONTEXT_CLICK
-        </button>
+          <div>
+            <label class="field-label" for="runDelay">連続実行間隔</label>
+            <select id="runDelay">
+              <option value="400">400ms</option>
+              <option value="700" selected>700ms</option>
+              <option value="1000">1000ms</option>
+              <option value="1500">1500ms</option>
+            </select>
+          </div>
+        </div>
 
-        <button id="KEYBOARD_TAP" class="btn-error">
-          KEYBOARD_TAP
-        </button>
-
-        <button id="VIRTUAL_KEY" class="btn-error">
-          VIRTUAL_KEY
-        </button>
-
-        <button id="LONG_PRESS" class="btn-error">
-          LONG_PRESS
-        </button>
-
-        <button id="TEXT_HANDLE_MOVE" class="btn-error">
-          TEXT_HANDLE_MOVE
-        </button>
-
-        <button id="NONE" class="btn-error">
-          NONE
+        <button id="runVisibleHaptics" class="btn-secondary">
+          表示中のハプティクスを順番に実行
         </button>
       </div>
+
+      <div id="hapticCount" class="count"></div>
+      <div id="hapticGrid" class="button-grid haptic-grid"></div>
+
+      <div class="notice">
+        Android には <code>window.androidInterface.haptics("CLOCK_TICK")</code> のように文字列だけを送信します。
+        flags や JSON payload は使用していません。
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="section-title">
+        <div class="icon">🧪</div>
+        <div>
+          <h2>未定義値テスト</h2>
+          <span>Android 側の unknown constant ログ確認用です</span>
+        </div>
+      </div>
+
+      <div class="button-grid">
+        <button id="UNKNOWN_HAPTIC" class="btn-warning">
+          UNKNOWN_TEST
+        </button>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="section-title">
+        <div class="icon">📝</div>
+        <div>
+          <h2>送信ログ</h2>
+          <span>最後に送った bridge payload を表示します</span>
+        </div>
+      </div>
+
+      <div id="log" class="log">まだ送信していません。</div>
     </section>
   </main>
 
   <script>
+    const HAPTIC_CONSTANTS = [
+      {
+        name: 'LONG_PRESS',
+        api: 3,
+        value: 0,
+        className: 'btn-error',
+        description: '長押し操作'
+      },
+      {
+        name: 'VIRTUAL_KEY',
+        api: 5,
+        value: 1,
+        className: 'btn-error',
+        description: '画面上の仮想キー押下'
+      },
+      {
+        name: 'KEYBOARD_TAP',
+        api: 8,
+        value: 3,
+        className: 'btn-error',
+        description: 'ソフトキーボードのキー押下'
+      },
+      {
+        name: 'CLOCK_TICK',
+        api: 21,
+        value: 4,
+        className: 'btn-light',
+        description: '時計の tick 操作'
+      },
+      {
+        name: 'CONTEXT_CLICK',
+        api: 23,
+        value: 6,
+        className: 'btn-success',
+        description: 'context click 操作'
+      },
+      {
+        name: 'KEYBOARD_PRESS',
+        api: 27,
+        value: 3,
+        className: 'btn-error',
+        description: '仮想 / ソフトキーボード押下'
+      },
+      {
+        name: 'KEYBOARD_RELEASE',
+        api: 27,
+        value: 7,
+        className: 'btn-error',
+        description: '仮想キーボードのリリース'
+      },
+      {
+        name: 'VIRTUAL_KEY_RELEASE',
+        api: 27,
+        value: 8,
+        className: 'btn-error',
+        description: '仮想キーのリリース'
+      },
+      {
+        name: 'TEXT_HANDLE_MOVE',
+        api: 27,
+        value: 9,
+        className: 'btn-light',
+        description: 'テキスト選択ハンドル移動'
+      },
+      {
+        name: 'GESTURE_START',
+        api: 30,
+        value: 12,
+        className: 'btn-primary',
+        description: 'ジェスチャー開始'
+      },
+      {
+        name: 'GESTURE_END',
+        api: 30,
+        value: 13,
+        className: 'btn-primary',
+        description: 'ジェスチャー終了'
+      },
+      {
+        name: 'CONFIRM',
+        api: 30,
+        value: 16,
+        className: 'btn-success',
+        description: '確認 / 成功'
+      },
+      {
+        name: 'REJECT',
+        api: 30,
+        value: 17,
+        className: 'btn-error',
+        description: '拒否 / 失敗'
+      },
+      {
+        name: 'TOGGLE_ON',
+        api: 34,
+        value: 21,
+        className: 'btn-success',
+        description: 'トグル ON'
+      },
+      {
+        name: 'TOGGLE_OFF',
+        api: 34,
+        value: 22,
+        className: 'btn-muted',
+        description: 'トグル OFF'
+      },
+      {
+        name: 'GESTURE_THRESHOLD_ACTIVATE',
+        api: 34,
+        value: 23,
+        className: 'btn-primary',
+        description: '閾値を超えて activate'
+      },
+      {
+        name: 'GESTURE_THRESHOLD_DEACTIVATE',
+        api: 34,
+        value: 24,
+        className: 'btn-primary',
+        description: '閾値を戻って deactivate'
+      },
+      {
+        name: 'DRAG_START',
+        api: 34,
+        value: 25,
+        className: 'btn-warning',
+        description: 'drag-and-drop 開始'
+      },
+      {
+        name: 'SEGMENT_TICK',
+        api: 34,
+        value: 26,
+        className: 'btn-light',
+        description: '離散的な選択肢の切り替え'
+      },
+      {
+        name: 'SEGMENT_FREQUENT_TICK',
+        api: 34,
+        value: 27,
+        className: 'btn-light',
+        description: '高頻度な選択肢の切り替え'
+      }
+    ];
+
     function showNativeInterfaceError() {
       alert('ネイティブインターフェースが見つかりませんでした。');
     }
 
-    // 輝度調整
-    function postBrightness(value) {
-      if (
+    function writeLog(title, payload) {
+      const log = document.getElementById('log');
+      log.textContent = [
+        title,
+        JSON.stringify(payload, null, 2)
+      ].join('\n');
+    }
+
+    function hasWebKitHandler(name) {
+      return (
         typeof window.webkit !== 'undefined' &&
         typeof window.webkit.messageHandlers !== 'undefined' &&
-        typeof window.webkit.messageHandlers.brightness !== 'undefined'
-      ) {
-        window.webkit.messageHandlers.brightness.postMessage(value);
-      } else if (
+        typeof window.webkit.messageHandlers[name] !== 'undefined'
+      );
+    }
+
+    function hasAndroidMethod(name) {
+      return (
         typeof window.androidInterface !== 'undefined' &&
-        typeof window.androidInterface.brightness !== 'undefined'
-      ) {
-        window.androidInterface.brightness(value);
-      } else {
-        showNativeInterfaceError();
+        typeof window.androidInterface[name] === 'function'
+      );
+    }
+
+    function postBrightness(value) {
+      const payload = {
+        value,
+        sentAt: new Date().toISOString()
+      };
+
+      if (hasWebKitHandler('brightness')) {
+        window.webkit.messageHandlers.brightness.postMessage(value);
+        writeLog('iOS brightness.postMessage(value)', payload);
+        return;
       }
+
+      if (hasAndroidMethod('brightness')) {
+        window.androidInterface.brightness(value);
+        writeLog('Android androidInterface.brightness(value)', payload);
+        return;
+      }
+
+      writeLog('brightness error', {
+        message: 'native interface not found',
+        payload
+      });
+      showNativeInterfaceError();
+    }
+
+    function postHaptic(feedbackType) {
+      const payload = {
+        feedbackType,
+        sentAt: new Date().toISOString()
+      };
+
+      if (hasWebKitHandler('haptic')) {
+        window.webkit.messageHandlers.haptic.postMessage({
+          feedbackType
+        });
+        writeLog('iOS haptic.postMessage({ feedbackType })', payload);
+        return;
+      }
+
+      if (hasAndroidMethod('haptics')) {
+        window.androidInterface.haptics(feedbackType);
+        writeLog('Android androidInterface.haptics(feedbackType)', payload);
+        return;
+      }
+
+      writeLog('haptic error', {
+        message: 'native interface not found',
+        payload
+      });
+      showNativeInterfaceError();
+    }
+
+    function createHapticButton(item) {
+      const button = document.createElement('button');
+
+      button.type = 'button';
+      button.className = `haptic-button ${item.className}`;
+      button.dataset.name = item.name;
+      button.dataset.api = String(item.api);
+      button.dataset.value = String(item.value);
+      button.dataset.description = item.description;
+
+      button.innerHTML = `
+        <span class="haptic-name">${item.name}</span>
+        <span class="haptic-meta">
+          <span class="pill">API ${item.api}</span>
+          <span class="pill">value ${item.value}</span>
+        </span>
+        <span class="haptic-desc">${item.description}</span>
+      `;
+
+      button.addEventListener('click', function () {
+        postHaptic(item.name);
+      });
+
+      return button;
+    }
+
+    function renderHaptics() {
+      const query = document.getElementById('hapticSearch').value.trim().toLowerCase();
+      const grid = document.getElementById('hapticGrid');
+      const count = document.getElementById('hapticCount');
+
+      grid.innerHTML = '';
+
+      const filtered = HAPTIC_CONSTANTS.filter(function (item) {
+        if (!query) return true;
+
+        const haystack = [
+          item.name,
+          `api ${item.api}`,
+          String(item.api),
+          `value ${item.value}`,
+          String(item.value),
+          item.description
+        ].join(' ').toLowerCase();
+
+        return haystack.includes(query);
+      });
+
+      filtered.forEach(function (item) {
+        grid.appendChild(createHapticButton(item));
+      });
+
+      count.textContent = `${filtered.length} / ${HAPTIC_CONSTANTS.length} 件を表示中`;
+    }
+
+    function sleep(ms) {
+      return new Promise(function (resolve) {
+        setTimeout(resolve, ms);
+      });
+    }
+
+    async function runVisibleHaptics() {
+      const button = document.getElementById('runVisibleHaptics');
+      const delay = Number(document.getElementById('runDelay').value);
+      const visibleButtons = Array.from(document.querySelectorAll('#hapticGrid button'));
+
+      if (visibleButtons.length === 0) {
+        writeLog('run visible haptics', {
+          message: 'no visible haptic constants'
+        });
+        return;
+      }
+
+      button.disabled = true;
+      button.textContent = '順番に実行中...';
+
+      for (const hapticButton of visibleButtons) {
+        hapticButton.click();
+        await sleep(delay);
+      }
+
+      button.disabled = false;
+      button.textContent = '表示中のハプティクスを順番に実行';
     }
 
     document.getElementById('brightnessButton').addEventListener('click', function () {
@@ -283,51 +751,17 @@
       postBrightness(0);
     });
 
-    // ハプティクス
-    function postHaptic(feedbackType) {
-      if (
-        typeof window.webkit !== 'undefined' &&
-        typeof window.webkit.messageHandlers !== 'undefined' &&
-        typeof window.webkit.messageHandlers.haptic !== 'undefined'
-      ) {
-        window.webkit.messageHandlers.haptic.postMessage({ feedbackType });
-      } else if (
-        typeof window.androidInterface !== 'undefined' &&
-        typeof window.androidInterface.haptics !== 'undefined'
-      ) {
-        window.androidInterface.haptics(feedbackType);
-      } else {
-        showNativeInterfaceError();
-      }
-    }
+    document.getElementById('hapticSearch').addEventListener('input', renderHaptics);
 
-    document.getElementById('CLOCK_TICK').addEventListener('click', function () {
-      postHaptic('CLOCK_TICK');
+    document.getElementById('runVisibleHaptics').addEventListener('click', function () {
+      runVisibleHaptics();
     });
 
-    document.getElementById('CONTEXT_CLICK').addEventListener('click', function () {
-      postHaptic('CONTEXT_CLICK');
+    document.getElementById('UNKNOWN_HAPTIC').addEventListener('click', function () {
+      postHaptic('UNKNOWN_TEST');
     });
 
-    document.getElementById('KEYBOARD_TAP').addEventListener('click', function () {
-      postHaptic('KEYBOARD_TAP');
-    });
-
-    document.getElementById('VIRTUAL_KEY').addEventListener('click', function () {
-      postHaptic('VIRTUAL_KEY');
-    });
-
-    document.getElementById('LONG_PRESS').addEventListener('click', function () {
-      postHaptic('LONG_PRESS');
-    });
-
-    document.getElementById('TEXT_HANDLE_MOVE').addEventListener('click', function () {
-      postHaptic('TEXT_HANDLE_MOVE');
-    });
-
-    document.getElementById('NONE').addEventListener('click', function () {
-      postHaptic('NONE');
-    });
+    renderHaptics();
   </script>
 </body>
 </html>
