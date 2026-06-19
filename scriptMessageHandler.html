@@ -209,6 +209,7 @@
       justify-content: space-between;
       gap: 10px;
       position: relative;
+      scroll-margin-block: 24px;
     }
 
     .haptic-grid.is-running .haptic-button {
@@ -761,6 +762,14 @@
       button.classList.add('is-active');
     }
 
+    function scrollToActiveHaptic(button) {
+      button.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+        inline: 'nearest'
+      });
+    }
+
     async function runVisibleHaptics() {
       const button = document.getElementById('runVisibleHaptics');
       const grid = document.getElementById('hapticGrid');
@@ -781,6 +790,7 @@
       try {
         for (const hapticButton of visibleButtons) {
           setActiveHaptic(hapticButton);
+          scrollToActiveHaptic(hapticButton);
           hapticButton.click();
           await sleep(delay);
         }
