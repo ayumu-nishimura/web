@@ -132,6 +132,28 @@
       grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
     }
 
+    .toolbar {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .toolbar-row {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .toolbar-actions {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .is-hidden {
+      display: none !important;
+    }
+
     button {
       width: 100%;
       border: none;
@@ -282,18 +304,6 @@
       color: var(--muted);
     }
 
-    .toolbar {
-      display: grid;
-      gap: 10px;
-      margin-bottom: 14px;
-    }
-
-    .toolbar-row {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 10px;
-    }
-
     input,
     select {
       width: 100%;
@@ -353,6 +363,10 @@
     @media (min-width: 640px) {
       .toolbar-row {
         grid-template-columns: 1fr 180px;
+      }
+
+      .toolbar-actions {
+        grid-template-columns: 1fr 1fr;
       }
     }
 
@@ -424,9 +438,15 @@
           </div>
         </div>
 
-        <button id="runVisibleHaptics" class="btn-secondary">
-          表示中のハプティクスを順番に実行
-        </button>
+        <div class="toolbar-actions">
+          <button id="runVisibleHaptics" class="btn-secondary">
+            表示中のハプティクスを順番に実行
+          </button>
+
+          <button id="stopVisibleHaptics" class="btn-error is-hidden" disabled>
+            停止
+          </button>
+        </div>
       </div>
 
       <div id="hapticCount" class="count"></div>
@@ -611,6 +631,9 @@
       }
     ];
 
+    let isRunningHaptics = false;
+    let shouldStopHaptics = false;
+
     function showNativeInterfaceError() {
       alert('ネイティブインターフェースが見つかりませんでした。');
     }
@@ -751,6 +774,21 @@
       });
     }
 
+    function sleepUntilStopped(ms) {
+      return new Promise(function (resolve) {
+        const startedAt = Date.now();
+
+        const timer = setInterval(function () {
+          const elapsed = Date.now() - startedAt;
+
+          if (shouldStopHaptics || elapsed >= ms) {
+            clearInterval(timer);
+            resolve();
+          }
+        }, 50);
+      });
+    }
+
     function clearActiveHaptic() {
       document.querySelectorAll('#hapticGrid .haptic-button.is-active').forEach(function (button) {
         button.classList.remove('is-active');
@@ -770,11 +808,38 @@
       });
     }
 
+    function setHapticRunningState(isRunning) {
+      const runButton = document.getElementById('runVisibleHaptics');
+      const stopButton = document.getElementById('stopVisibleHaptics');
+
+      isRunningHaptics = isRunning;
+
+      runButton.disabled = isRunning;
+      runButton.textContent = isRunning
+        ? '順番に実行中...'
+        : '表示中のハプティクスを順番に実行';
+
+      stopButton.classList.toggle('is-hidden', !isRunning);
+      stopButton.disabled = !isRunning;
+    }
+
+    function stopVisibleHaptics() {
+      if (!isRunningHaptics) return;
+
+      shouldStopHaptics = true;
+
+      writeLog('stop visible haptics', {
+        message: 'stop requested',
+        sentAt: new Date().toISOString()
+      });
+    }
+
     async function runVisibleHaptics() {
-      const button = document.getElementById('runVisibleHaptics');
       const grid = document.getElementById('hapticGrid');
       const delay = Number(document.getElementById('runDelay').value);
       const visibleButtons = Array.from(document.querySelectorAll('#hapticGrid button'));
+
+      if (isRunningHaptics) return;
 
       if (visibleButtons.length === 0) {
         writeLog('run visible haptics', {
@@ -783,22 +848,33 @@
         return;
       }
 
-      button.disabled = true;
-      button.textContent = '順番に実行中...';
+      shouldStopHaptics = false;
+      setHapticRunningState(true);
       grid.classList.add('is-running');
 
       try {
         for (const hapticButton of visibleButtons) {
+          if (shouldStopHaptics) break;
+
           setActiveHaptic(hapticButton);
           scrollToActiveHaptic(hapticButton);
           hapticButton.click();
-          await sleep(delay);
+
+          await sleepUntilStopped(delay);
         }
       } finally {
         clearActiveHaptic();
         grid.classList.remove('is-running');
-        button.disabled = false;
-        button.textContent = '表示中のハプティクスを順番に実行';
+        setHapticRunningState(false);
+
+        if (shouldStopHaptics) {
+          writeLog('run visible haptics stopped', {
+            message: 'stopped by user',
+            sentAt: new Date().toISOString()
+          });
+        }
+
+        shouldStopHaptics = false;
       }
     }
 
@@ -814,6 +890,10 @@
 
     document.getElementById('runVisibleHaptics').addEventListener('click', function () {
       runVisibleHaptics();
+    });
+
+    document.getElementById('stopVisibleHaptics').addEventListener('click', function () {
+      stopVisibleHaptics();
     });
 
     document.getElementById('UNKNOWN_HAPTIC').addEventListener('click', function () {
