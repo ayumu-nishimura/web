@@ -38,6 +38,7 @@
       align-items: flex-start;
       justify-content: center;
       padding: 24px;
+      padding-bottom: calc(24px + 88px + env(safe-area-inset-bottom));
     }
 
     .container {
@@ -360,13 +361,29 @@
       margin-bottom: 10px;
     }
 
+    .floating-stop {
+      position: fixed;
+      left: 16px;
+      right: 16px;
+      bottom: calc(16px + env(safe-area-inset-bottom));
+      z-index: 1000;
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 12px;
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.86);
+      border: 1px solid var(--border);
+      box-shadow: 0 18px 42px rgba(15, 23, 42, 0.24);
+      backdrop-filter: blur(18px);
+    }
+
+    .floating-stop button {
+      box-shadow: 0 12px 28px rgba(239, 68, 68, 0.34);
+    }
+
     @media (min-width: 640px) {
       .toolbar-row {
         grid-template-columns: 1fr 180px;
-      }
-
-      .toolbar-actions {
-        grid-template-columns: 1fr 1fr;
       }
     }
 
@@ -442,10 +459,6 @@
           <button id="runVisibleHaptics" class="btn-secondary">
             表示中のハプティクスを順番に実行
           </button>
-
-          <button id="stopVisibleHaptics" class="btn-error is-hidden" disabled>
-            停止
-          </button>
         </div>
       </div>
 
@@ -486,6 +499,12 @@
       <div id="log" class="log">まだ送信していません。</div>
     </section>
   </main>
+
+  <div id="floatingStopHaptics" class="floating-stop is-hidden">
+    <button id="stopVisibleHaptics" class="btn-error" disabled>
+      停止
+    </button>
+  </div>
 
   <script>
     const HAPTIC_CONSTANTS = [
@@ -768,12 +787,6 @@
       count.textContent = `${filtered.length} / ${HAPTIC_CONSTANTS.length} 件を表示中`;
     }
 
-    function sleep(ms) {
-      return new Promise(function (resolve) {
-        setTimeout(resolve, ms);
-      });
-    }
-
     function sleepUntilStopped(ms) {
       return new Promise(function (resolve) {
         const startedAt = Date.now();
@@ -811,6 +824,7 @@
     function setHapticRunningState(isRunning) {
       const runButton = document.getElementById('runVisibleHaptics');
       const stopButton = document.getElementById('stopVisibleHaptics');
+      const floatingStop = document.getElementById('floatingStopHaptics');
 
       isRunningHaptics = isRunning;
 
@@ -819,7 +833,7 @@
         ? '順番に実行中...'
         : '表示中のハプティクスを順番に実行';
 
-      stopButton.classList.toggle('is-hidden', !isRunning);
+      floatingStop.classList.toggle('is-hidden', !isRunning);
       stopButton.disabled = !isRunning;
     }
 
