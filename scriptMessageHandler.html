@@ -221,16 +221,28 @@
       </div>
 
       <div class="button-grid three">
-        <button id="lightImpact" class="btn-light">
-          Light
+        <button id="CLOCK_TICK" class="btn-light">
+          CLOCK_TICK
         </button>
 
-        <button id="success" class="btn-success">
-          Success
+        <button id="CONTEXT_CLICK" class="btn-success">
+          CONTEXT_CLICK
         </button>
 
-        <button id="error" class="btn-error">
-          Error
+        <button id="KEYBOARD_TAP" class="btn-error">
+          KEYBOARD_TAP
+        </button>
+
+        <button id="VIRTUAL_KEY" class="btn-error">
+          VIRTUAL_KEY
+        </button>
+
+        <button id="LONG_PRESS" class="btn-error">
+          LONG_PRESS
+        </button>
+
+        <button id="TEXT_HANDLE_MOVE" class="btn-error">
+          TEXT_HANDLE_MOVE
         </button>
       </div>
     </section>
@@ -241,6 +253,7 @@
       alert('ネイティブインターフェースが見つかりませんでした。');
     }
 
+    // 輝度調整
     function postBrightness(value) {
       if (
         typeof window.webkit !== 'undefined' &&
@@ -258,6 +271,15 @@
       }
     }
 
+    document.getElementById('brightnessButton').addEventListener('click', function () {
+      postBrightness(1);
+    });
+
+    document.getElementById('resetBrightness').addEventListener('click', function () {
+      postBrightness(0);
+    });
+
+    // ハプティクス
     function postHaptic(feedbackType) {
       if (
         typeof window.webkit !== 'undefined' &&
@@ -275,24 +297,28 @@
       }
     }
 
-    document.getElementById('brightnessButton').addEventListener('click', function () {
-      postBrightness(1);
+    document.getElementById('CLOCK_TICK').addEventListener('click', function () {
+      postHaptic('CLOCK_TICK');
     });
 
-    document.getElementById('resetBrightness').addEventListener('click', function () {
-      postBrightness(0);
+    document.getElementById('CONTEXT_CLICK').addEventListener('click', function () {
+      postHaptic('CONTEXT_CLICK');
     });
 
-    document.getElementById('lightImpact').addEventListener('click', function () {
-      postHaptic('lightImpact');
+    document.getElementById('KEYBOARD_TAP').addEventListener('click', function () {
+      postHaptic('KEYBOARD_TAP');
     });
 
-    document.getElementById('success').addEventListener('click', function () {
-      postHaptic('success');
+    document.getElementById('VIRTUAL_KEY').addEventListener('click', function () {
+      postHaptic('VIRTUAL_KEY');
     });
 
-    document.getElementById('error').addEventListener('click', function () {
-      postHaptic('error');
+    document.getElementById('LONG_PRESS').addEventListener('click', function () {
+      postHaptic('LONG_PRESS');
+    });
+
+    document.getElementById('TEXT_HANDLE_MOVE').addEventListener('click', function () {
+      postHaptic('TEXT_HANDLE_MOVE');
     });
   </script>
 </body>
