@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -144,7 +145,8 @@
       transition:
         transform 0.15s ease,
         box-shadow 0.15s ease,
-        filter 0.15s ease;
+        filter 0.15s ease,
+        opacity 0.15s ease;
       box-shadow: 0 10px 24px rgba(99, 102, 241, 0.26);
       -webkit-tap-highlight-color: transparent;
     }
@@ -207,6 +209,36 @@
       flex-direction: column;
       justify-content: space-between;
       gap: 10px;
+      position: relative;
+    }
+
+    .haptic-grid.is-running .haptic-button {
+      opacity: 0.28;
+      filter: grayscale(1) brightness(0.75);
+      transform: scale(0.98);
+      box-shadow: none;
+    }
+
+    .haptic-grid.is-running .haptic-button.is-active {
+      opacity: 1;
+      filter: none;
+      transform: scale(1.03);
+      box-shadow: 0 16px 34px rgba(15, 23, 42, 0.28);
+      outline: 3px solid rgba(255, 255, 255, 0.9);
+      z-index: 1;
+    }
+
+    .haptic-grid.is-running .haptic-button.is-active::after {
+      content: "実行中";
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.78);
+      color: white;
+      font-size: 11px;
+      font-weight: 800;
     }
 
     .haptic-name {
@@ -719,8 +751,20 @@
       });
     }
 
+    function clearActiveHaptic() {
+      document.querySelectorAll('#hapticGrid .haptic-button.is-active').forEach(function (button) {
+        button.classList.remove('is-active');
+      });
+    }
+
+    function setActiveHaptic(button) {
+      clearActiveHaptic();
+      button.classList.add('is-active');
+    }
+
     async function runVisibleHaptics() {
       const button = document.getElementById('runVisibleHaptics');
+      const grid = document.getElementById('hapticGrid');
       const delay = Number(document.getElementById('runDelay').value);
       const visibleButtons = Array.from(document.querySelectorAll('#hapticGrid button'));
 
@@ -733,14 +777,20 @@
 
       button.disabled = true;
       button.textContent = '順番に実行中...';
+      grid.classList.add('is-running');
 
-      for (const hapticButton of visibleButtons) {
-        hapticButton.click();
-        await sleep(delay);
+      try {
+        for (const hapticButton of visibleButtons) {
+          setActiveHaptic(hapticButton);
+          hapticButton.click();
+          await sleep(delay);
+        }
+      } finally {
+        clearActiveHaptic();
+        grid.classList.remove('is-running');
+        button.disabled = false;
+        button.textContent = '表示中のハプティクスを順番に実行';
       }
-
-      button.disabled = false;
-      button.textContent = '表示中のハプティクスを順番に実行';
     }
 
     document.getElementById('brightnessButton').addEventListener('click', function () {
@@ -765,3 +815,4 @@
   </script>
 </body>
 </html>
+```
