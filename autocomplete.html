@@ -45,86 +45,407 @@
       outline-offset: 3px;
     }
     [hidden] { display: none !important; }
-    .app { width: min(100% - 36px, 760px); margin: 0 auto; padding: 28px 0 max(48px, env(safe-area-inset-bottom)); }
-    .topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 29px; }
+
+    .app {
+      width: min(100% - 36px, 760px);
+      margin: 0 auto;
+      padding: 28px 0 max(48px, env(safe-area-inset-bottom));
+    }
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 29px;
+    }
     .brand { display: inline-flex; align-items: center; gap: 10px; min-width: 0; }
-    .brand-icon { display: grid; place-items: center; width: 38px; height: 38px; flex: 0 0 38px; border-radius: 12px; background: #1c3156; color: white; }
+    .brand-icon {
+      display: grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      flex: 0 0 38px;
+      border-radius: 12px;
+      background: #1c3156;
+      color: white;
+    }
     .brand-icon svg { width: 20px; height: 20px; }
-    .brand-name { font-size: 12px; font-weight: 800; color: #27364f; letter-spacing: .09em; }
-    .env { display: inline-flex; align-items: center; gap: 7px; max-width: 62%; min-height: 34px; padding: 6px 11px; border: 1px solid #e3e7ef; border-radius: 999px; background: #fff; font-size: 12px; color: #5c6b80; font-weight: 650; white-space: nowrap; }
-    .env-dot { width: 8px; height: 8px; flex: 0 0 8px; border-radius: 50%; background: #e4a342; }
-    .env[data-connected="true"] { border-color: #cde8d8; background: #f2fbf6; color: #17754c; }
+    .brand-name {
+      font-size: 12px;
+      font-weight: 800;
+      color: #27364f;
+      letter-spacing: .09em;
+    }
+    .env {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      max-width: 62%;
+      min-height: 34px;
+      padding: 6px 11px;
+      border: 1px solid #e3e7ef;
+      border-radius: 999px;
+      background: #fff;
+      font-size: 12px;
+      color: #5c6b80;
+      font-weight: 650;
+      white-space: nowrap;
+    }
+    .env-dot {
+      width: 8px;
+      height: 8px;
+      flex: 0 0 8px;
+      border-radius: 50%;
+      background: #e4a342;
+    }
+    .env[data-connected="true"] {
+      border-color: #cde8d8;
+      background: #f2fbf6;
+      color: #17754c;
+    }
     .env[data-connected="true"] .env-dot { background: #20a46c; }
+
     .intro { margin-bottom: 24px; }
-    h1 { margin: 0 0 6px; font-size: clamp(24px, 4.8vw, 31px); line-height: 1.35; letter-spacing: -.045em; font-weight: 800; }
+    h1 {
+      margin: 0 0 6px;
+      font-size: clamp(24px, 4.8vw, 31px);
+      line-height: 1.35;
+      letter-spacing: -.045em;
+      font-weight: 800;
+    }
     .intro p { margin: 0; color: var(--text-secondary); font-size: 14px; }
-    .connection-help { display: flex; align-items: flex-start; gap: 8px; margin: 17px 0 0; padding: 11px 13px; border: 1px solid #f3e4c9; border-radius: 10px; background: var(--warning-soft); color: #785423; font-size: 12px; line-height: 1.65; }
-    .connection-help svg { width: 16px; height: 16px; margin-top: 2px; flex: 0 0 16px; }
+    .connection-help {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin: 17px 0 0;
+      padding: 11px 13px;
+      border: 1px solid #f3e4c9;
+      border-radius: 10px;
+      background: var(--warning-soft);
+      color: #785423;
+      font-size: 12px;
+      line-height: 1.65;
+    }
+    .connection-help svg {
+      width: 16px;
+      height: 16px;
+      margin-top: 2px;
+      flex: 0 0 16px;
+    }
 
-    .panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: 0 5px 18px rgba(23, 39, 70, .035); overflow: hidden; }
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: 0 5px 18px rgba(23, 39, 70, .035);
+      overflow: hidden;
+    }
     .panel-content { padding: 27px 30px 24px; }
-    .step-heading { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 22px; }
-    .step-number { display: grid; place-items: center; flex: 0 0 35px; height: 35px; border-radius: 11px; background: var(--primary-soft); color: var(--primary); font-size: 12px; font-weight: 800; letter-spacing: .02em; }
-    h2 { margin: 0 0 3px; font-size: 19px; line-height: 1.4; letter-spacing: -.035em; font-weight: 800; }
-    .step-description { margin: 0; font-size: 12px; color: var(--text-secondary); line-height: 1.8; }
+    .step-heading {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+    .step-number {
+      display: grid;
+      place-items: center;
+      flex: 0 0 35px;
+      height: 35px;
+      border-radius: 11px;
+      background: var(--primary-soft);
+      color: var(--primary);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .02em;
+    }
+    h2 {
+      margin: 0 0 3px;
+      font-size: 19px;
+      line-height: 1.4;
+      letter-spacing: -.035em;
+      font-weight: 800;
+    }
+    .step-description {
+      margin: 0;
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.8;
+    }
 
-    .table-head, .pair { display: grid; grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr) 43px; align-items: center; gap: 10px; }
-    .table-head { margin: 0 0 8px; padding: 0 2px; color: #53627a; font-size: 12px; font-weight: 750; }
+    .table-head, .pair {
+      display: grid;
+      grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr) 43px;
+      align-items: center;
+      gap: 10px;
+    }
+    .table-head {
+      margin: 0 0 8px;
+      padding: 0 2px;
+      color: #53627a;
+      font-size: 12px;
+      font-weight: 750;
+    }
     .pair { margin-bottom: 10px; }
-    input[type="text"] { width: 100%; min-width: 0; height: 48px; padding: 10px 13px; border: 1px solid #d7dfea; border-radius: 9px; background: #fff; color: var(--text); font-size: 16px; outline: none; transition: border-color .15s, box-shadow .15s; }
+    input[type="text"] {
+      width: 100%;
+      min-width: 0;
+      height: 48px;
+      padding: 10px 13px;
+      border: 1px solid #d7dfea;
+      border-radius: 9px;
+      background: #fff;
+      color: var(--text);
+      font-size: 16px;
+      outline: none;
+      transition: border-color .15s, box-shadow .15s;
+    }
     input[type="text"]::placeholder { color: #9ba6b6; }
-    input[type="text"]:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(36,91,231,.12); }
-    input[type="text"][aria-invalid="true"] { border-color: var(--danger); box-shadow: 0 0 0 2px rgba(183,43,64,.10); }
-    .pair-key { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace !important; }
-    .btn-remove { display: grid; place-items: center; width: 43px; height: 46px; padding: 0; border: 1px solid transparent; border-radius: 9px; background: #f4f6f9; color: #69788d; transition: background .15s, color .15s; }
+    input[type="text"]:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(36,91,231,.12);
+    }
+    input[type="text"][aria-invalid="true"] {
+      border-color: var(--danger);
+      box-shadow: 0 0 0 2px rgba(183,43,64,.10);
+    }
+    .pair-key {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace !important;
+    }
+    .btn-remove {
+      display: grid;
+      place-items: center;
+      width: 43px;
+      height: 46px;
+      padding: 0;
+      border: 1px solid transparent;
+      border-radius: 9px;
+      background: #f4f6f9;
+      color: #69788d;
+      transition: background .15s, color .15s;
+    }
     .btn-remove:hover { color: var(--danger); background: var(--danger-soft); }
     .btn-remove svg { width: 18px; height: 18px; }
-    .empty { padding: 16px; margin: 0 0 10px; border: 1px dashed #ced8e7; background: #fafcff; border-radius: 10px; color: var(--text-secondary); font-size: 13px; text-align: center; }
-    .btn-add { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; min-height: 46px; padding: 10px 13px; margin-top: 4px; border: 1px dashed var(--primary); border-radius: 9px; background: #fff; color: #2456c9; font-size: 14px; font-weight: 750; transition: background .15s, border-color .15s; }
+    .empty {
+      padding: 16px;
+      margin: 0 0 10px;
+      border: 1px dashed #ced8e7;
+      background: #fafcff;
+      border-radius: 10px;
+      color: var(--text-secondary);
+      font-size: 13px;
+      text-align: center;
+    }
+    .btn-add {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      width: 100%;
+      min-height: 46px;
+      padding: 10px 13px;
+      margin-top: 4px;
+      border: 1px dashed var(--primary);
+      border-radius: 9px;
+      background: #fff;
+      color: #2456c9;
+      font-size: 14px;
+      font-weight: 750;
+      transition: background .15s, border-color .15s;
+    }
     .btn-add:hover { background: #eaf1ff; border-color: #9ab6f6; }
     .btn-add svg { width: 17px; height: 17px; }
     .warning-inline { margin: 12px 0 0; color: #886023; font-size: 12px; }
-    .form-actions { margin-top: 23px; padding-top: 20px; border-top: 1px solid #edf0f5; }
-    .send-method-label { display: block; margin: 0 0 9px; color: #53627a; font-size: 12px; font-weight: 750; }
-    .send-buttons { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
-    .form-caption { display: flex; align-items: flex-start; gap: 6px; margin-top: 13px; color: #76849a; font-size: 12px; line-height: 1.6; }
-    .form-caption svg { width: 15px; height: 15px; margin-top: 2px; flex: 0 0 15px; }
-    .btn-submit, .btn-secondary { display: inline-flex; justify-content: center; align-items: center; gap: 9px; width: 100%; min-height: 48px; padding: 10px 16px; border: 1px solid var(--primary); border-radius: 10px; font-size: 14px; font-weight: 800; transition: background .15s, box-shadow .15s; }
-    .btn-submit { color: #fff; background: var(--primary); box-shadow: 0 4px 11px rgba(36,91,231,.13); }
-    .btn-submit:hover { background: var(--primary-hover); box-shadow: 0 5px 14px rgba(36,91,231,.2); }
+
+    .form-actions {
+      margin-top: 23px;
+      padding-top: 20px;
+      border-top: 1px solid #edf0f5;
+    }
+    .send-method-label {
+      display: block;
+      margin: 0 0 9px;
+      color: #53627a;
+      font-size: 12px;
+      font-weight: 750;
+    }
+    .send-buttons {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .form-caption {
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      margin-top: 13px;
+      color: #76849a;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+    .form-caption svg {
+      width: 15px;
+      height: 15px;
+      margin-top: 2px;
+      flex: 0 0 15px;
+    }
+    .btn-submit, .btn-secondary {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      gap: 9px;
+      width: 100%;
+      min-height: 48px;
+      padding: 10px 16px;
+      border: 1px solid var(--primary);
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 800;
+      transition: background .15s, box-shadow .15s;
+    }
+    .btn-submit {
+      color: #fff;
+      background: var(--primary);
+      box-shadow: 0 4px 11px rgba(36,91,231,.13);
+    }
+    .btn-submit:hover {
+      background: var(--primary-hover);
+      box-shadow: 0 5px 14px rgba(36,91,231,.2);
+    }
     .btn-secondary { color: var(--primary); background: #fff; }
     .btn-secondary:hover { background: var(--primary-soft); }
-    .btn-submit:disabled, .btn-secondary:disabled { opacity: .55; cursor: default; }
-    .btn-submit svg, .btn-secondary svg { width: 18px; height: 18px; flex-shrink: 0; }
+    .btn-submit:disabled, .btn-secondary:disabled {
+      opacity: .55;
+      cursor: default;
+    }
+    .btn-submit svg, .btn-secondary svg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
 
-    .status { display: flex; align-items: flex-start; gap: 10px; padding: 14px; margin: 16px 0 0; border: 1px solid transparent; border-radius: 10px; font-size: 13px; line-height: 1.65; }
-    .status-icon { width: 19px; height: 19px; flex: 0 0 19px; margin-top: 1px; }
-    .status[data-type="success"] .status-error-mark, .status[data-type="error"] .status-success-mark { display: none; }
+    .status {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 14px;
+      margin: 16px 0 0;
+      border: 1px solid transparent;
+      border-radius: 10px;
+      font-size: 13px;
+      line-height: 1.65;
+    }
+    .status-icon {
+      width: 19px;
+      height: 19px;
+      flex: 0 0 19px;
+      margin-top: 1px;
+    }
+    .status[data-type="success"] .status-error-mark,
+    .status[data-type="error"] .status-success-mark { display: none; }
     .status-content { flex: 1; min-width: 0; }
     .status p { margin: 0; }
-    .status[data-type="success"] { background: var(--success-soft); border-color: #ceebdb; color: var(--success); }
-    .status[data-type="error"] { background: var(--danger-soft); border-color: #f3d5d8; color: var(--danger); }
-    .btn-reload { display: inline-flex; align-items: center; gap: 7px; margin-top: 10px; padding: 7px 11px; border: 1px solid #b6dac7; border-radius: 8px; background: #fff; color: #11653c; font-size: 12px; font-weight: 750; }
+    .status[data-type="success"] {
+      background: var(--success-soft);
+      border-color: #ceebdb;
+      color: var(--success);
+    }
+    .status[data-type="error"] {
+      background: var(--danger-soft);
+      border-color: #f3d5d8;
+      color: var(--danger);
+    }
+    .btn-reload {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin-top: 10px;
+      padding: 7px 11px;
+      border: 1px solid #b6dac7;
+      border-radius: 8px;
+      background: #fff;
+      color: #11653c;
+      font-size: 12px;
+      font-weight: 750;
+    }
     .btn-reload:hover { background: #f4fbf6; }
     .btn-reload svg { width: 15px; height: 15px; }
 
-    .panel-details { border-top: 1px solid #edf0f5; background: #fcfdff; }
-    details summary { display: flex; align-items: center; gap: 8px; padding: 14px 30px; list-style: none; color: #52637c; font-size: 12px; font-weight: 750; cursor: pointer; user-select: none; }
+    .panel-details {
+      border-top: 1px solid #edf0f5;
+      background: #fcfdff;
+    }
+    details summary {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 30px;
+      list-style: none;
+      color: #52637c;
+      font-size: 12px;
+      font-weight: 750;
+      cursor: pointer;
+      user-select: none;
+    }
     details summary::-webkit-details-marker { display: none; }
     details summary svg { width: 16px; height: 16px; }
     .chevron { margin-left: auto; transition: transform .15s; }
     details[open] .chevron { transform: rotate(180deg); }
     .details-body { padding: 0 30px 16px; }
-    .details-body code { display: block; overflow-wrap: anywhere; color: #42536d; font-size: 11px; line-height: 1.65; }
+    .details-body code {
+      display: block;
+      overflow-wrap: anywhere;
+      color: #42536d;
+      font-size: 11px;
+      line-height: 1.65;
+    }
 
-    .flow-divider { display: flex; align-items: center; justify-content: center; height: 32px; margin: 7px 0 8px; color: #97a5b7; }
+    .flow-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 32px;
+      margin: 7px 0 8px;
+      color: #97a5b7;
+    }
     .flow-divider svg { width: 25px; height: 25px; }
-    .verify-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+    .verify-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
     .verify-field { display: block; min-width: 0; }
-    .verify-label { display: flex; align-items: baseline; justify-content: flex-start; flex-wrap: wrap; gap: 6px; margin-bottom: 7px; font-size: 13px; font-weight: 750; }
-    .verify-name { color: #8390a3; font-size: 11px; font-weight: 400; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
-    .verify-help { margin: 14px 0 0; color: #77859a; font-size: 12px; line-height: 1.7; }
-    .footer { margin: 23px 0 0; text-align: center; color: #9aa5b4; font-size: 11px; letter-spacing: .03em; }
+    .verify-label {
+      display: flex;
+      align-items: baseline;
+      justify-content: flex-start;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 7px;
+      font-size: 13px;
+      font-weight: 750;
+    }
+    .verify-name {
+      color: #8390a3;
+      font-size: 11px;
+      font-weight: 400;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .verify-help {
+      margin: 14px 0 0;
+      color: #77859a;
+      font-size: 12px;
+      line-height: 1.7;
+    }
+    .footer {
+      margin: 23px 0 0;
+      text-align: center;
+      color: #9aa5b4;
+      font-size: 11px;
+      letter-spacing: .03em;
+    }
+
     @media (max-width: 620px) {
       .app { width: min(100% - 28px, 530px); padding-top: 17px; }
       .topbar { margin-bottom: 24px; }
@@ -141,7 +462,10 @@
     @media (max-width: 380px) {
       .app { width: min(100% - 24px, 530px); }
       .panel-content { padding-left: 15px; padding-right: 15px; }
-      .table-head, .pair { grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr) 37px; gap: 6px; }
+      .table-head, .pair {
+        grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr) 37px;
+        gap: 6px;
+      }
       .btn-remove { width: 37px; }
       input[type="text"] { padding-inline: 9px; }
       .table-head { font-size: 11px; }
@@ -153,11 +477,12 @@
       *, *::before, *::after { transition-duration: .01ms !important; }
     }
   </style>
+
   <script>
     (() => {
       'use strict';
 
-      // ネイティブ側に登録する自動補完対象のURL。既存仕様を維持する。
+      // 自動補完対象のURL。既存仕様を維持する。
       const TARGET_URL = 'https://ayumu-nishimura.github.io/web/autocomplete.html';
       const INITIAL_PAIRS = [
         { key: 'id', value: '1234' },
@@ -167,7 +492,7 @@
       const toQueryString = (pairs) =>
         pairs.map(({ key, value }) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`).join('&');
 
-      // 同名キーは後に入力した値を採用。特殊なキーによるプロトタイプ汚染を防止。
+      // 同名キーは後の値を採用。特殊なキーによるプロトタイプ汚染を防止。
       const toFieldMap = (pairs) =>
         pairs.reduce((fields, { key, value }) => {
           fields[key] = value;
@@ -177,14 +502,22 @@
       const NATIVE_BRIDGES = [
         {
           label: 'iOS',
-          isAvailable: () => Boolean(window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.autocomplete && typeof window.webkit.messageHandlers.autocomplete.postMessage === 'function'),
+          isAvailable: () => Boolean(
+            window.webkit &&
+            window.webkit.messageHandlers &&
+            window.webkit.messageHandlers.autocomplete &&
+            typeof window.webkit.messageHandlers.autocomplete.postMessage === 'function'
+          ),
           send: (pairs) => window.webkit.messageHandlers.autocomplete.postMessage({
             [TARGET_URL]: toQueryString(pairs),
           }),
         },
         {
           label: 'Android',
-          isAvailable: () => Boolean(window.androidInterface && typeof window.androidInterface.overrideCredentials === 'function'),
+          isAvailable: () => Boolean(
+            window.androidInterface &&
+            typeof window.androidInterface.overrideCredentials === 'function'
+          ),
           send: (pairs) => window.androidInterface.overrideCredentials(
             TARGET_URL,
             JSON.stringify(toFieldMap(pairs)),
@@ -193,7 +526,9 @@
       ];
 
       const findBridge = () => NATIVE_BRIDGES.find((bridge) => bridge.isAvailable());
+
       const iconTrash = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 4h4m-8 3 1 13h10l1-13M10 11v6m4-6v6"/></svg>';
+
       const el = (id) => document.getElementById(id);
 
       document.addEventListener('DOMContentLoaded', () => {
@@ -205,6 +540,7 @@
         const addButton = el('addPair');
         const formSubmitButton = el('form-submit');
         const verifyForm = el('myform2');
+
         let pairCount = 0;
         let postPrepared = false;
 
@@ -212,10 +548,15 @@
         // 02 の確認欄と同名のフィールドが重複しないようにする。
         const resetPostFields = () => {
           if (!postPrepared) return;
-          form.querySelectorAll('.pair-value').forEach((input) => input.removeAttribute('name'));
+
+          form.querySelectorAll('.pair-value').forEach((input) => {
+            input.removeAttribute('name');
+          });
+
           verifyForm.querySelectorAll('[data-verify-name]').forEach((input) => {
             input.name = input.dataset.verifyName;
           });
+
           postPrepared = false;
         };
 
@@ -224,10 +565,12 @@
             input.dataset.verifyName = input.name;
             input.removeAttribute('name');
           });
+
           form.querySelectorAll('.pair').forEach((row) => {
             const key = row.querySelector('.pair-key').value.trim();
             row.querySelector('.pair-value').name = key;
           });
+
           postPrepared = true;
         };
 
@@ -238,7 +581,9 @@
           status.hidden = false;
         };
 
-        const clearStatus = () => { status.hidden = true; };
+        const clearStatus = () => {
+          status.hidden = true;
+        };
 
         const updateEmptyState = () => {
           empty.hidden = form.querySelector('.pair') !== null;
@@ -246,7 +591,9 @@
 
         const updateDuplicateNotice = () => {
           const keys = Array.from(form.querySelectorAll('.pair-key'))
-            .map((input) => input.value.trim()).filter(Boolean);
+            .map((input) => input.value.trim())
+            .filter(Boolean);
+
           el('duplicate-notice').hidden = new Set(keys).size === keys.length;
         };
 
@@ -261,75 +608,120 @@
           input.autocomplete = 'off';
           input.spellcheck = false;
           input.autocapitalize = 'off';
+
           input.addEventListener('input', () => {
             input.removeAttribute('aria-invalid');
             resetPostFields();
             clearStatus();
             updateDuplicateNotice();
           });
+
           return input;
         };
 
         const addPair = (pair = { key: '', value: '' }, focus = false) => {
           pairCount++;
+
           const row = document.createElement('div');
           row.className = 'pair';
-          const keyInput = createTextInput('', '例: id', pair.key, 'pair-key', `項目 ${pairCount} の名前`);
-          const valueInput = createTextInput('', '例: 1234', pair.value, 'pair-value', `項目 ${pairCount} の値`);
+
+          const keyInput = createTextInput(
+            '',
+            '例: id',
+            pair.key,
+            'pair-key',
+            `項目 ${pairCount} の名前`
+          );
+
+          const valueInput = createTextInput(
+            '',
+            '例: 1234',
+            pair.value,
+            'pair-value',
+            `項目 ${pairCount} の値`
+          );
+
           const removeButton = document.createElement('button');
           removeButton.type = 'button';
           removeButton.className = 'btn-remove';
           removeButton.innerHTML = iconTrash;
           removeButton.setAttribute('aria-label', `項目 ${pairCount} を削除`);
           removeButton.title = '項目を削除';
+
           removeButton.addEventListener('click', () => {
             const nextField = row.nextElementSibling?.querySelector('.pair-key') ||
               row.previousElementSibling?.querySelector('.pair-key');
+
             resetPostFields();
             row.remove();
             updateEmptyState();
             updateDuplicateNotice();
             clearStatus();
-            if (nextField && document.activeElement === document.body) nextField.focus();
+
+            if (nextField && document.activeElement === document.body) {
+              nextField.focus();
+            }
           });
+
           row.append(keyInput, valueInput, removeButton);
           el('pair-list').appendChild(row);
           updateEmptyState();
+
           if (focus) keyInput.focus();
         };
 
         const renderEnvironment = () => {
           const bridge = findBridge();
           const env = el('env');
+
           env.dataset.connected = String(Boolean(bridge));
           env.querySelector('.env-text').textContent = bridge
             ? `${bridge.label} アプリに接続中`
             : 'アプリに未接続';
+
           el('connection-help').hidden = Boolean(bridge);
         };
 
         INITIAL_PAIRS.forEach((pair) => addPair(pair));
         el('target-url').textContent = TARGET_URL;
         renderEnvironment();
-        addButton.addEventListener('click', () => { resetPostFields(); addPair(undefined, true); clearStatus(); });
-        reloadButton.addEventListener('click', () => window.location.reload());
+
+        addButton.addEventListener('click', () => {
+          resetPostFields();
+          addPair(undefined, true);
+          clearStatus();
+        });
+
+        reloadButton.addEventListener('click', () => {
+          window.location.reload();
+        });
 
         // 両方の送信方法で、同じ 01 の Key-Value を使用する。
         const collectPairs = () => {
-          const rows = Array.from(el('pair-list').querySelectorAll('.pair'));
+          const rows = Array.from(
+            el('pair-list').querySelectorAll('.pair')
+          );
+
           if (!rows.length) {
             showStatus('項目を1件以上追加してください。', 'error');
             addButton.focus();
             return null;
           }
-          const invalidInput = rows.map((row) => row.querySelector('.pair-key'))
+
+          const invalidInput = rows
+            .map((row) => row.querySelector('.pair-key'))
             .find((input) => !input.value.trim());
+
           if (invalidInput) {
             invalidInput.setAttribute('aria-invalid', 'true');
-            showStatus('項目名が空欄です。項目名を入力するか、その行を削除してください。', 'error');
+            showStatus(
+              '項目名が空欄です。項目名を入力するか、その行を削除してください。',
+              'error'
+            );
             invalidInput.focus();
             return null;
           }
+
           return rows.map((row) => ({
             key: row.querySelector('.pair-key').value.trim(),
             value: row.querySelector('.pair-value').value,
@@ -338,32 +730,55 @@
 
         const ensureConnected = () => {
           renderEnvironment();
+
           const bridge = findBridge();
           if (!bridge) {
-            showStatus('アプリとの接続が見つかりません。アプリ内でこのページを開いてから送信してください。', 'error');
+            showStatus(
+              'アプリとの接続が見つかりません。アプリ内でこのページを開いてから送信してください。',
+              'error'
+            );
           }
+
           return bridge;
         };
 
-        // 送信方法 1: JS ブリッジから直接アプリに保存を依頼する。
+        // 方法1: JS ブリッジから直接アプリに保存を依頼する。
         form.addEventListener('submit', (event) => {
           event.preventDefault();
+
           if (formSubmitButton.disabled) return;
+
           const pairs = collectPairs();
           if (!pairs) return;
+
           const bridge = ensureConnected();
           if (!bridge) return;
+
           resetPostFields();
+
           try {
             bridge.send(pairs);
-            showStatus('アプリへの送信処理を実行しました。ページを開き直して、下の入力欄に値が入っているか確認してください。', 'success');
+            showStatus(
+              'アプリへの送信処理を実行しました。ページを開き直して、下の入力欄に値が入っているか確認してください。',
+              'success'
+            );
           } catch (error) {
-            showStatus('送信処理を実行できませんでした。アプリ内で開き直してからお試しください。', 'error');
+            showStatus(
+              '送信処理を実行できませんでした。アプリ内で開き直してからお試しください。',
+              'error'
+            );
           }
         });
 
-        // 送信方法 2: POST を発生させ、アプリ側のフォーム送信検知を確認する。
-        formSubmitButton.addEventListener('click', async () => {
+        // 方法2: フォーム送信（POST）を発生させ、アプリ側のフォーム送信検知を確認する。
+        // iOS はページ遷移を伴う POST だけを検知する（fetch / XHR 以外の通信は対象外）ため、
+        // 実際のフォーム送信を使う。送信先は見えない iframe にして、値を読み取られる
+        // このページを表示したままにする。Android はページ内のあらゆる POST を検知する。
+        const postProbe = el('post-probe');
+        const postSink = el('post-sink');
+        const POST_TIMEOUT_MS = 5000;
+
+        formSubmitButton.addEventListener('click', () => {
           const pairs = collectPairs();
           if (!pairs) return;
           if (!ensureConnected()) return;
@@ -371,29 +786,37 @@
           // 検出時にページ上の値を読み取れるよう、01 の値入力欄を
           // 指定した name と紐づける。02 の確認欄との競合は避ける。
           preparePostFields();
+
           formSubmitButton.disabled = true;
           el('submit').disabled = true;
-          try {
-            // 元の検証仕様を維持: 値は POST の本文に含めず、検証用の目印だけ送る。
-            // 静的サイトの 405 応答でも、リクエスト発生自体が検証対象。
-            await fetch(window.location.href, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-              body: 'autofill_test=form',
-              credentials: 'omit',
-              cache: 'no-store',
-            });
-          } catch (error) {
-            // ネットワークの成否だけでは、アプリ側で保存されたか判断できない。
-          } finally {
+
+          let finished = false;
+          const finish = () => {
+            if (finished) return;
+            finished = true;
             formSubmitButton.disabled = false;
             el('submit').disabled = false;
-          }
-          showStatus('フォーム送信（POST）を実行しました。ページを開き直して、下の入力欄に値が入っているか確認してください。', 'success');
+            showStatus(
+              'フォーム送信（POST）を実行しました。ページを開き直して、下の入力欄に値が入っているか確認してください。',
+              'success'
+            );
+          };
+
+          // 応答（静的サイトでは 405）を iframe が読み込んだら完了。応答が無くてもボタンを戻す。
+          postSink.addEventListener('load', finish, { once: true });
+          window.setTimeout(finish, POST_TIMEOUT_MS);
+
+          // 送信先は自動補完の対象URL（iOS は送信先が自動補完設定の URL で始まっている必要がある）。
+          // 入力値は本文に含めず、検証用の目印だけを送る。
+          postProbe.action = TARGET_URL;
+          postProbe.submit();
         });
 
-        // 02 は自動補完を確認するための入力欄。ページを遷移させない。
-        verifyForm.addEventListener('submit', (event) => event.preventDefault());
+        // 02 は自動補完の確認専用。Enterによるページ遷移を防ぐ。
+        verifyForm.addEventListener('submit', (event) => {
+          event.preventDefault();
+        });
+
         window.addEventListener('pageshow', renderEnvironment);
         window.addEventListener('focus', renderEnvironment);
         document.addEventListener('visibilitychange', () => {
@@ -408,19 +831,36 @@
     <div class="topbar">
       <div class="brand" aria-label="Autofill Test">
         <span class="brand-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 9h8M8 13h8M8 17h5"/></svg>
+          <svg viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="1.8"
+               stroke-linecap="round" stroke-linejoin="round">
+            <rect x="4" y="4" width="16" height="16" rx="3"/>
+            <path d="M8 9h8M8 13h8M8 17h5"/>
+          </svg>
         </span>
         <span class="brand-name">AUTOFILL TEST</span>
       </div>
-      <div class="env" id="env" data-connected="false" role="status" aria-live="polite"><span class="env-dot" aria-hidden="true"></span><span class="env-text">接続を確認中</span></div>
+      <div class="env" id="env" data-connected="false"
+           role="status" aria-live="polite">
+        <span class="env-dot" aria-hidden="true"></span>
+        <span class="env-text">接続を確認中</span>
+      </div>
     </div>
 
     <header class="intro">
       <h1>自動補完テスト</h1>
       <p>Web フォームの自動補完を確認するためのページです。</p>
       <div class="connection-help" id="connection-help" hidden>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5m0 4h.01"/></svg>
-        <span>ブラウザで表示中です。送信するには、このページをアプリ内で開いてください。</span>
+        <svg viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="1.8"
+             stroke-linecap="round" stroke-linejoin="round"
+             aria-hidden="true">
+          <circle cx="12" cy="12" r="9"/>
+          <path d="M12 7v5m0 4h.01"/>
+        </svg>
+        <span>
+          ブラウザで表示中です。送信するには、このページをアプリ内で開いてください。
+        </span>
       </div>
     </header>
 
@@ -430,52 +870,116 @@
           <span class="step-number" aria-hidden="true">01</span>
           <div>
             <h2 id="configure-title">保存する項目を入力</h2>
-            <p class="step-description">「アプリに送信」は入力値を直接アプリへ渡し、「フォームで送信」はPOSTを発生させてアプリの保存処理を確認します。</p>
+            <p class="step-description">
+              「アプリに送信」は入力値を直接アプリへ渡し、「フォームで送信」はPOSTを発生させてアプリの保存処理を確認します。
+            </p>
           </div>
         </div>
+
         <form id="myform" novalidate>
-          <div class="table-head" aria-hidden="true"><span>項目名（name）</span><span>値</span><span></span></div>
+          <div class="table-head" aria-hidden="true">
+            <span>項目名（name）</span>
+            <span>値</span>
+            <span></span>
+          </div>
           <div id="pair-list"></div>
-          <p class="empty" id="empty" hidden>項目がありません。下のボタンから追加してください。</p>
+          <p class="empty" id="empty" hidden>
+            項目がありません。下のボタンから追加してください。
+          </p>
+
           <button class="btn-add" type="button" id="addPair">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+            <svg viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" aria-hidden="true">
+              <path d="M12 5v14M5 12h14"/>
+            </svg>
             項目を追加
           </button>
-          <p class="warning-inline" id="duplicate-notice" hidden>同じ項目名が複数あります。送信方法によって保存結果が異なる場合があります。</p>
+
+          <p class="warning-inline" id="duplicate-notice" hidden>
+            同じ項目名が複数あります。送信方法によって保存結果が異なる場合があります。
+          </p>
+
           <div class="form-actions">
             <span class="send-method-label">送信方法を選択</span>
+
             <div class="send-buttons">
               <button class="btn-submit" type="submit" id="submit">
                 アプリに送信
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h16m-6-6 6 6-6 6"/></svg>
+                <svg viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="1.9"
+                     stroke-linecap="round" stroke-linejoin="round"
+                     aria-hidden="true">
+                  <path d="M4 12h16m-6-6 6 6-6 6"/>
+                </svg>
               </button>
+
               <button class="btn-secondary" type="button" id="form-submit">
                 フォームで送信（POST）
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h16m-6-6 6 6-6 6"/></svg>
+                <svg viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="1.9"
+                     stroke-linecap="round" stroke-linejoin="round"
+                     aria-hidden="true">
+                  <path d="M4 12h16m-6-6 6 6-6 6"/>
+                </svg>
               </button>
             </div>
+
             <div class="form-caption">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11Z"/><path d="m9 12 2 2 4-4"/></svg>
-              <span>実際の認証情報ではなく、検証用の値を使用してください。</span>
+              <svg viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="1.7"
+                   stroke-linecap="round" stroke-linejoin="round"
+                   aria-hidden="true">
+                <path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11Z"/>
+                <path d="m9 12 2 2 4-4"/>
+              </svg>
+              <span>
+                実際の認証情報ではなく、検証用の値を使用してください。
+              </span>
             </div>
           </div>
         </form>
-        <div class="status" id="status" role="status" aria-live="polite" hidden>
-          <svg class="status-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path class="status-success-mark" d="m8.5 12 2.5 2.5 4.5-5"/><path class="status-error-mark" d="M12 7v5m0 4h.01"/></svg>
+
+        <div class="status" id="status" role="status"
+             aria-live="polite" hidden>
+          <svg class="status-icon" viewBox="0 0 24 24"
+               fill="none" stroke="currentColor" stroke-width="1.8"
+               stroke-linecap="round" stroke-linejoin="round"
+               aria-hidden="true">
+            <circle cx="12" cy="12" r="9"/>
+            <path class="status-success-mark" d="m8.5 12 2.5 2.5 4.5-5"/>
+            <path class="status-error-mark" d="M12 7v5m0 4h.01"/>
+          </svg>
           <div class="status-content">
             <p id="status-message"></p>
             <button type="button" class="btn-reload" id="reload" hidden>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 8V4h-4M20 4a9 9 0 1 0 2 11"/></svg>
+              <svg viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="1.9"
+                   stroke-linecap="round" stroke-linejoin="round"
+                   aria-hidden="true">
+                <path d="M20 8V4h-4M20 4a9 9 0 1 0 2 11"/>
+              </svg>
               ページを再読み込み
             </button>
           </div>
         </div>
       </div>
+
       <details class="panel-details">
         <summary>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-2 2m2.5 5.5a5 5 0 0 0-7.5-.5l-3 3a5 5 0 1 0 7 7l2-2"/></svg>
+          <svg viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="1.7"
+               stroke-linecap="round" stroke-linejoin="round"
+               aria-hidden="true">
+            <path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-2 2m2.5 5.5a5 5 0 0 0-7.5-.5l-3 3a5 5 0 1 0 7 7l2-2"/>
+          </svg>
           保存先 URL
-          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+          <svg class="chevron" viewBox="0 0 24 24"
+               fill="none" stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round"
+               aria-hidden="true">
+            <path d="m6 9 6 6 6-6"/>
+          </svg>
         </summary>
         <div class="details-body">
           <code id="target-url"></code>
@@ -483,7 +987,13 @@
       </details>
     </section>
 
-    <div class="flow-divider" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 3v17m-5-5 5 5 5-5"/></svg></div>
+    <div class="flow-divider" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="1.8"
+           stroke-linecap="round">
+        <path d="M12 3v17m-5-5 5 5 5-5"/>
+      </svg>
+    </div>
 
     <section class="panel" aria-labelledby="verify-title">
       <div class="panel-content">
@@ -491,27 +1001,52 @@
           <span class="step-number" aria-hidden="true">02</span>
           <div>
             <h2 id="verify-title">自動入力の確認</h2>
-            <p class="step-description">送信後にこのページを開き直すと、保存した値がここに自動で入力されます。</p>
+            <p class="step-description">
+              送信後にこのページを開き直すと、保存した値がここに自動で入力されます。
+            </p>
           </div>
         </div>
-        <!-- name 属性は自動補完設定のキーに対応する。確認欄は常にページ内に配置する。 -->
+
+        <!-- name 属性は自動補完設定のキーに対応する -->
         <form id="myform2" autocomplete="off">
           <div class="verify-grid">
             <label class="verify-field">
-              <span class="verify-label">ID <span class="verify-name">name="id"</span></span>
-              <input type="text" name="id" autocomplete="off" placeholder="ここにIDが入ります">
+              <span class="verify-label">
+                ID <span class="verify-name">name="id"</span>
+              </span>
+              <input type="text" name="id" autocomplete="off"
+                     placeholder="ここにIDが入ります">
             </label>
             <label class="verify-field">
-              <span class="verify-label">パスワード <span class="verify-name">name="password"</span></span>
-              <input type="text" name="password" autocomplete="off" placeholder="ここにパスワードが入ります">
+              <span class="verify-label">
+                パスワード <span class="verify-name">name="password"</span>
+              </span>
+              <input type="text" name="password" autocomplete="off"
+                     placeholder="ここにパスワードが入ります">
             </label>
           </div>
         </form>
-        <p class="verify-help">この確認欄が対応するのは <code>id</code> と <code>password</code> です。反映されないときは、送信した項目名が一致しているか確認してください。フォーム送信（POST）で保存した値は、一部の記号が変わった形で反映される場合があります（Androidで確認されている挙動）。</p>
+
+        <p class="verify-help">
+          この確認欄が対応するのは
+          <code>id</code> と <code>password</code> です。
+          反映されないときは、送信した項目名が一致しているか確認してください。
+          フォーム送信（POST）で保存した値は、一部の記号が変わった形で反映される場合があります（Androidで確認されている挙動）。
+          iOS のフォーム送信では、自動補完設定の項目名（<code>id</code> と <code>password</code>）がすべて 01 にないと保存されません。
+        </p>
       </div>
     </section>
 
-    <footer class="footer">AUTOFILL TEST · WebView 検証ページ</footer>
+    <!-- 「フォームで送信（POST）」用。見えない iframe に送信して、このページを表示したままにする。
+         入力値は含めず、検証用の目印だけを送る。 -->
+    <form id="post-probe" method="post" target="post-sink" hidden>
+      <input type="hidden" name="autofill_test" value="form">
+    </form>
+    <iframe name="post-sink" id="post-sink" title="フォーム送信の受け取り用" tabindex="-1" hidden></iframe>
+
+    <footer class="footer">
+      AUTOFILL TEST · WebView 検証ページ
+    </footer>
   </main>
 </body>
 </html>
