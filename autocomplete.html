@@ -84,12 +84,18 @@
     .btn-add:hover { background: #eaf1ff; border-color: #9ab6f6; }
     .btn-add svg { width: 17px; height: 17px; }
     .warning-inline { margin: 12px 0 0; color: #886023; font-size: 12px; }
-    .form-actions { display: flex; align-items: center; justify-content: space-between; gap: 18px; margin-top: 23px; padding-top: 20px; border-top: 1px solid #edf0f5; }
-    .form-caption { display: flex; align-items: flex-start; gap: 6px; max-width: 290px; color: #76849a; font-size: 12px; line-height: 1.6; }
+    .form-actions { margin-top: 23px; padding-top: 20px; border-top: 1px solid #edf0f5; }
+    .send-method-label { display: block; margin: 0 0 9px; color: #53627a; font-size: 12px; font-weight: 750; }
+    .send-buttons { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .form-caption { display: flex; align-items: flex-start; gap: 6px; margin-top: 13px; color: #76849a; font-size: 12px; line-height: 1.6; }
     .form-caption svg { width: 15px; height: 15px; margin-top: 2px; flex: 0 0 15px; }
-    .btn-submit { display: inline-flex; justify-content: center; align-items: center; gap: 11px; min-height: 48px; min-width: 204px; padding: 10px 20px; border: 1px solid var(--primary); border-radius: 10px; color: #fff; background: var(--primary); box-shadow: 0 4px 11px rgba(36,91,231,.13); font-size: 14px; font-weight: 800; transition: background .15s, box-shadow .15s; }
+    .btn-submit, .btn-secondary { display: inline-flex; justify-content: center; align-items: center; gap: 9px; width: 100%; min-height: 48px; padding: 10px 16px; border: 1px solid var(--primary); border-radius: 10px; font-size: 14px; font-weight: 800; transition: background .15s, box-shadow .15s; }
+    .btn-submit { color: #fff; background: var(--primary); box-shadow: 0 4px 11px rgba(36,91,231,.13); }
     .btn-submit:hover { background: var(--primary-hover); box-shadow: 0 5px 14px rgba(36,91,231,.2); }
-    .btn-submit svg { width: 18px; height: 18px; }
+    .btn-secondary { color: var(--primary); background: #fff; }
+    .btn-secondary:hover { background: var(--primary-soft); }
+    .btn-submit:disabled, .btn-secondary:disabled { opacity: .55; cursor: default; }
+    .btn-submit svg, .btn-secondary svg { width: 18px; height: 18px; flex-shrink: 0; }
 
     .status { display: flex; align-items: flex-start; gap: 10px; padding: 14px; margin: 16px 0 0; border: 1px solid transparent; border-radius: 10px; font-size: 13px; line-height: 1.65; }
     .status-icon { width: 19px; height: 19px; flex: 0 0 19px; margin-top: 1px; }
@@ -126,9 +132,8 @@
       .panel-content { padding: 21px 20px 22px; }
       .step-heading { gap: 10px; margin-bottom: 19px; }
       h2 { font-size: 18px; }
-      .form-actions { flex-direction: column-reverse; align-items: stretch; gap: 10px; margin-top: 20px; padding-top: 18px; }
-      .form-caption { max-width: none; }
-      .btn-submit { width: 100%; }
+      .form-actions { margin-top: 20px; padding-top: 18px; }
+      .send-buttons { grid-template-columns: 1fr; }
       .verify-grid { grid-template-columns: 1fr; gap: 13px; }
       details summary { padding: 13px 20px; }
       .details-body { padding: 0 20px 15px; }
@@ -198,7 +203,33 @@
         const statusMessage = el('status-message');
         const reloadButton = el('reload');
         const addButton = el('addPair');
+        const formSubmitButton = el('form-submit');
+        const verifyForm = el('myform2');
         let pairCount = 0;
+        let postPrepared = false;
+
+        // POST 時は 01 の値入力欄のみを name 付きにする。
+        // 02 の確認欄と同名のフィールドが重複しないようにする。
+        const resetPostFields = () => {
+          if (!postPrepared) return;
+          form.querySelectorAll('.pair-value').forEach((input) => input.removeAttribute('name'));
+          verifyForm.querySelectorAll('[data-verify-name]').forEach((input) => {
+            input.name = input.dataset.verifyName;
+          });
+          postPrepared = false;
+        };
+
+        const preparePostFields = () => {
+          verifyForm.querySelectorAll('input[name]').forEach((input) => {
+            input.dataset.verifyName = input.name;
+            input.removeAttribute('name');
+          });
+          form.querySelectorAll('.pair').forEach((row) => {
+            const key = row.querySelector('.pair-key').value.trim();
+            row.querySelector('.pair-value').name = key;
+          });
+          postPrepared = true;
+        };
 
         const showStatus = (message, type) => {
           status.dataset.type = type;
@@ -222,7 +253,7 @@
         const createTextInput = (name, placeholder, value, className, ariaLabel) => {
           const input = document.createElement('input');
           input.type = 'text';
-          input.name = name;
+          if (name) input.name = name;
           input.placeholder = placeholder;
           input.value = value;
           input.className = className;
@@ -232,6 +263,7 @@
           input.autocapitalize = 'off';
           input.addEventListener('input', () => {
             input.removeAttribute('aria-invalid');
+            resetPostFields();
             clearStatus();
             updateDuplicateNotice();
           });
@@ -242,8 +274,8 @@
           pairCount++;
           const row = document.createElement('div');
           row.className = 'pair';
-          const keyInput = createTextInput(`key${pairCount}`, '例: id', pair.key, 'pair-key', `項目 ${pairCount} の名前`);
-          const valueInput = createTextInput(`value${pairCount}`, '例: 1234', pair.value, 'pair-value', `項目 ${pairCount} の値`);
+          const keyInput = createTextInput('', '例: id', pair.key, 'pair-key', `項目 ${pairCount} の名前`);
+          const valueInput = createTextInput('', '例: 1234', pair.value, 'pair-value', `項目 ${pairCount} の値`);
           const removeButton = document.createElement('button');
           removeButton.type = 'button';
           removeButton.className = 'btn-remove';
@@ -253,6 +285,7 @@
           removeButton.addEventListener('click', () => {
             const nextField = row.nextElementSibling?.querySelector('.pair-key') ||
               row.previousElementSibling?.querySelector('.pair-key');
+            resetPostFields();
             row.remove();
             updateEmptyState();
             updateDuplicateNotice();
@@ -278,16 +311,16 @@
         INITIAL_PAIRS.forEach((pair) => addPair(pair));
         el('target-url').textContent = TARGET_URL;
         renderEnvironment();
-        addButton.addEventListener('click', () => { addPair(undefined, true); clearStatus(); });
+        addButton.addEventListener('click', () => { resetPostFields(); addPair(undefined, true); clearStatus(); });
         reloadButton.addEventListener('click', () => window.location.reload());
 
-        form.addEventListener('submit', (event) => {
-          event.preventDefault();
+        // 両方の送信方法で、同じ 01 の Key-Value を使用する。
+        const collectPairs = () => {
           const rows = Array.from(el('pair-list').querySelectorAll('.pair'));
           if (!rows.length) {
             showStatus('項目を1件以上追加してください。', 'error');
             addButton.focus();
-            return;
+            return null;
           }
           const invalidInput = rows.map((row) => row.querySelector('.pair-key'))
             .find((input) => !input.value.trim());
@@ -295,27 +328,72 @@
             invalidInput.setAttribute('aria-invalid', 'true');
             showStatus('項目名が空欄です。項目名を入力するか、その行を削除してください。', 'error');
             invalidInput.focus();
-            return;
+            return null;
           }
-          const pairs = rows.map((row) => ({
+          return rows.map((row) => ({
             key: row.querySelector('.pair-key').value.trim(),
             value: row.querySelector('.pair-value').value,
           }));
-          const bridge = findBridge();
+        };
+
+        const ensureConnected = () => {
           renderEnvironment();
+          const bridge = findBridge();
           if (!bridge) {
             showStatus('アプリとの接続が見つかりません。アプリ内でこのページを開いてから送信してください。', 'error');
-            return;
           }
+          return bridge;
+        };
+
+        // 送信方法 1: JS ブリッジから直接アプリに保存を依頼する。
+        form.addEventListener('submit', (event) => {
+          event.preventDefault();
+          if (formSubmitButton.disabled) return;
+          const pairs = collectPairs();
+          if (!pairs) return;
+          const bridge = ensureConnected();
+          if (!bridge) return;
+          resetPostFields();
           try {
             bridge.send(pairs);
-            showStatus('送信処理を実行しました。ページを開き直して、下の入力欄に値が入っているか確認してください。', 'success');
+            showStatus('アプリへの送信処理を実行しました。ページを開き直して、下の入力欄に値が入っているか確認してください。', 'success');
           } catch (error) {
             showStatus('送信処理を実行できませんでした。アプリ内で開き直してからお試しください。', 'error');
           }
         });
 
-        el('myform2').addEventListener('submit', (event) => event.preventDefault());
+        // 送信方法 2: POST を発生させ、アプリ側のフォーム送信検知を確認する。
+        formSubmitButton.addEventListener('click', async () => {
+          const pairs = collectPairs();
+          if (!pairs) return;
+          if (!ensureConnected()) return;
+
+          // 検出時にページ上の値を読み取れるよう、01 の値入力欄を
+          // 指定した name と紐づける。02 の確認欄との競合は避ける。
+          preparePostFields();
+          formSubmitButton.disabled = true;
+          el('submit').disabled = true;
+          try {
+            // 元の検証仕様を維持: 値は POST の本文に含めず、検証用の目印だけ送る。
+            // 静的サイトの 405 応答でも、リクエスト発生自体が検証対象。
+            await fetch(window.location.href, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+              body: 'autofill_test=form',
+              credentials: 'omit',
+              cache: 'no-store',
+            });
+          } catch (error) {
+            // ネットワークの成否だけでは、アプリ側で保存されたか判断できない。
+          } finally {
+            formSubmitButton.disabled = false;
+            el('submit').disabled = false;
+          }
+          showStatus('フォーム送信（POST）を実行しました。ページを開き直して、下の入力欄に値が入っているか確認してください。', 'success');
+        });
+
+        // 02 は自動補完を確認するための入力欄。ページを遷移させない。
+        verifyForm.addEventListener('submit', (event) => event.preventDefault());
         window.addEventListener('pageshow', renderEnvironment);
         window.addEventListener('focus', renderEnvironment);
         document.addEventListener('visibilitychange', () => {
@@ -352,7 +430,7 @@
           <span class="step-number" aria-hidden="true">01</span>
           <div>
             <h2 id="configure-title">保存する項目を入力</h2>
-            <p class="step-description">入力欄の名前（name）と値を入力して「アプリに送信」を押すと、アプリに保存されます。</p>
+            <p class="step-description">「アプリに送信」は入力値を直接アプリへ渡し、「フォームで送信」はPOSTを発生させてアプリの保存処理を確認します。</p>
           </div>
         </div>
         <form id="myform" novalidate>
@@ -363,16 +441,23 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
             項目を追加
           </button>
-          <p class="warning-inline" id="duplicate-notice" hidden>同じ項目名が複数あります。Androidでは最後の値が使用されます。</p>
+          <p class="warning-inline" id="duplicate-notice" hidden>同じ項目名が複数あります。送信方法によって保存結果が異なる場合があります。</p>
           <div class="form-actions">
+            <span class="send-method-label">送信方法を選択</span>
+            <div class="send-buttons">
+              <button class="btn-submit" type="submit" id="submit">
+                アプリに送信
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h16m-6-6 6 6-6 6"/></svg>
+              </button>
+              <button class="btn-secondary" type="button" id="form-submit">
+                フォームで送信（POST）
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h16m-6-6 6 6-6 6"/></svg>
+              </button>
+            </div>
             <div class="form-caption">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11Z"/><path d="m9 12 2 2 4-4"/></svg>
               <span>実際の認証情報ではなく、検証用の値を使用してください。</span>
             </div>
-            <button class="btn-submit" type="submit" id="submit">
-              アプリに送信
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h16m-6-6 6 6-6 6"/></svg>
-            </button>
           </div>
         </form>
         <div class="status" id="status" role="status" aria-live="polite" hidden>
@@ -422,7 +507,7 @@
             </label>
           </div>
         </form>
-        <p class="verify-help">この確認欄が対応するのは <code>id</code> と <code>password</code> です。反映されないときは、送信した項目名が一致しているか確認してください。</p>
+        <p class="verify-help">この確認欄が対応するのは <code>id</code> と <code>password</code> です。反映されないときは、送信した項目名が一致しているか確認してください。フォーム送信（POST）で保存した値は、一部の記号が変わった形で反映される場合があります（Androidで確認されている挙動）。</p>
       </div>
     </section>
 
