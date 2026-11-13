@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f7f9fc">
+  <meta name="description" content="Android WebView でカメラと位置情報の権限リクエストを確認するテストページ">
+  <title>WebView Permission Test</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --background: #f7f9fc;
+      --surface: #ffffff;
+      --ink: #17233b;
+      --muted: #64748b;
+      --subtle: #8794a8;
+      --line: #e5eaf2;
+      --blue: #265bdf;
+      --blue-hover: #1c4bbf;
+      --blue-soft: #edf3ff;
+      --green: #167854;
+      --green-soft: #e7f7ef;
+      --red: #b83b42;
+      --red-soft: #fff0f0;
+      --amber: #996118;
+      --amber-soft: #fff6e6;
+      --radius: 20px;
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Noto Sans JP", "Yu Gothic", Meiryo, sans-serif;
+      -webkit-text-size-adjust: 100%;
+      font-synthesis: none;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; min-height: 100vh; background: var(--background); color: var(--ink); }
+    button { font: inherit; -webkit-tap-highlight-color: transparent; }
+    button:focus-visible { outline: 3px solid #90b1ff; outline-offset: 3px; }
+    .container { max-width: 1000px; padding: 0 28px; margin: 0 auto; }
+    .topbar { height: 76px; background: rgba(255,255,255,.94); border-bottom: 1px solid var(--line); display:flex; align-items:center; }
+    .topbar-inner { width:100%; display:flex; align-items:center; justify-content:space-between; gap:20px; }
+    .brand { display:flex; gap:12px; align-items:center; min-width:0; }
+    .brand-icon { width:34px; height:34px; border-radius:11px; display:grid; place-items:center; background:var(--blue); color:white; flex:0 0 auto; }
+    .brand-name { font-weight: 780; font-size:14px; letter-spacing:.065em; }
+    .brand-tag { font-size: 11px; font-weight: 700; letter-spacing:.07em; color:#718096; background:#f0f3f8; border:1px solid #e5eaf1; padding: 5px 9px; border-radius:6px; }
+    main { padding: 46px 0 68px; }
+    .eyebrow { font-size: 12px; font-weight: 800; letter-spacing: .14em; color: var(--blue); margin:0 0 12px; }
+    h1 { font-size:clamp(28px, 4.6vw, 40px); letter-spacing: -.055em; line-height:1.35; margin:0; font-weight: 800; }
+    .intro { font-size: 14px; line-height: 1.9; color:var(--muted); max-width:690px; margin:14px 0 26px; }
+    .runtime { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom: 26px; }
+    .runtime-pill { display:flex; align-items:center; gap:7px; padding: 8px 11px; border:1px solid var(--line); background:white; border-radius:9px; font-size:12px; color:#43516a; }
+    .runtime-label { color:var(--subtle); }
+    .dot { width:7px; height:7px; background:#c5ccd6; border-radius:50%; display:inline-block; flex:0 0 auto; }
+    .dot.ok { background: #24a36d; } .dot.bad { background: #d45b52; }
+    .section-heading { display:flex; align-items:center; justify-content:space-between; gap:12px; margin: 0 0 16px; }
+    h2 { margin:0; font-weight: 800; font-size:16px; letter-spacing:-.015em; }
+    .section-hint { margin:0; color:var(--subtle); font-size:12px; }
+    .permission-grid { display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:18px; }
+    .panel { border:1px solid var(--line); border-radius:var(--radius); background:var(--surface); box-shadow:0 4px 14px rgba(26,51,94,.025); min-width:0; overflow:hidden; }
+    .panel-main { padding:24px; }
+    .panel-head { display:flex; gap:14px; align-items:start; }
+    .feature-icon { width:47px; height:47px; border-radius:14px; display:grid; place-items:center; flex:0 0 auto; background:var(--blue-soft); color:var(--blue); }
+    .feature-icon.location { background:#f1efff; color:#6653ce; }
+    .feature-label { color:#96a0b1; font-size:10px; letter-spacing:.12em; font-weight:800; margin:3px 0 6px; }
+    .feature-title { font-size:21px; font-weight:800; letter-spacing:-.025em; margin:0; }
+    .panel-desc { color:var(--muted); font-size:13px; line-height:1.85; min-height:49px; margin:19px 0 20px; }
+    .status-row { display:flex; gap:8px; align-items:center; flex-wrap:wrap; font-size:12px; color:var(--muted); margin-bottom:13px; }
+    .status-name { font-weight:650; }
+    .status { display:inline-flex; align-items:center; gap:6px; font-weight:700; font-size:11px; padding:5px 9px; border-radius:7px; background:#f1f4f8; color:#56657b; }
+    .status::before { content:""; width:6px; height:6px; border-radius:50%; background:#9da8b7; }
+    .status.loading { background: var(--blue-soft); color:var(--blue); } .status.loading::before { background:var(--blue); }
+    .status.success { background:var(--green-soft); color:var(--green); } .status.success::before { background:#23a674; }
+    .status.error { background:var(--red-soft); color:var(--red); } .status.error::before { background:var(--red); }
+    .status.warn { background:var(--amber-soft); color:var(--amber); } .status.warn::before { background:#d39727; }
+    .primary { border:0; background:var(--blue); color:white; width:100%; min-height:48px; border-radius:11px; display:flex; justify-content:center; align-items:center; gap:9px; padding:12px 16px; font-size:13px; font-weight:750; cursor:pointer; box-shadow:0 5px 9px rgba(38,91,223,.12); transition:background .15s ease, transform .15s ease; }
+    .primary:hover:not(:disabled) { background:var(--blue-hover); }
+    .primary:active:not(:disabled) { transform:scale(.99); }
+    .primary:disabled { opacity:.6; cursor:progress; }
+    .result { min-height:198px; background:#fafbfd; border-top:1px solid var(--line); padding:17px 24px 21px; }
+    .result-label { margin:0 0 12px; font-size:11px; font-weight:750; color:#8490a4; letter-spacing:.06em; }
+    .preview { height:124px; border:1px dashed #dae2ec; border-radius:12px; background:#f2f5fa; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden; }
+    .preview video { width:100%; height:100%; object-fit:cover; display:none; background:#101827; }
+    .preview.active { background:#0e182b; border-style:solid; border-color:#0e182b; }
+    .preview.active video { display:block; }
+    .empty-view { display:flex; align-items:center; flex-direction:column; justify-content:center; gap:8px; color:#a1aec2; font-size:12px; }
+    .preview.active .empty-view { display:none; }
+    .secondary { margin-top:10px; width:100%; border:1px solid #dbe2ee; color:#3d4e68; background:white; border-radius:9px; min-height:36px; padding:7px 12px; font-size:12px; font-weight:700; cursor:pointer; }
+    .secondary:hover { background:#f6f8fc; }
+    .secondary:disabled { opacity:.4; cursor:not-allowed; }
+    .message { font-size:11px; color:#78869b; line-height:1.6; margin:9px 0 0; min-height: 18px; overflow-wrap:anywhere; }
+    .geo-output { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .value-box { border:1px solid #e5eaf2; background:#fff; border-radius:11px; padding:12px 13px; min-width:0; }
+    .value-box-label { color:#8a97aa; font-size:10px; font-weight:650; margin-bottom:8px; }
+    .value-box-value { font-size:19px; letter-spacing:-.025em; font-weight:750; font-variant-numeric: tabular-nums; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .value-box-unit { font-size:11px; font-weight:500; color:#8896ab; }
+    .geo-meta { color:#8a97aa; font-size:11px; margin-top:10px; display:flex; gap:6px; flex-wrap:wrap; }
+    .diagnostics { margin-top:28px; background:#fff; border:1px solid var(--line); border-radius:18px; overflow:hidden; }
+    .diagnostics-top { display:flex; align-items:center; justify-content:space-between; padding:19px 22px 16px; gap:12px; border-bottom:1px solid var(--line); }
+    .diagnostics-caption { color:var(--muted); font-size:12px; margin:6px 0 0; line-height:1.7; }
+    .log-actions { display:flex; gap:7px; }
+    .text-button { background:#fff; border:1px solid #e2e7ef; border-radius:8px; padding:7px 10px; color:#5a6b82; font-size:11px; cursor:pointer; white-space:nowrap; }
+    .text-button:hover { background:#f6f8fc; }
+    .log-area { height:170px; overflow:auto; padding:13px 22px 20px; background:#fcfdff; }
+    .log-line { font-size:11px; color:#526176; line-height:1.85; display:flex; align-items:baseline; gap:10px; overflow-wrap:anywhere; }
+    .log-time { color:#9aa5b7; flex:0 0 auto; font-variant-numeric:tabular-nums; }
+    .log-line.fail .log-text { color:var(--red); }
+    .log-line.good .log-text { color:var(--green); }
+    .info-note { display:flex; gap:12px; margin-top:22px; padding:17px 20px; border-radius:13px; border:1px solid #e1e7f0; background:#f0f4fa; }
+    .info-note svg { flex: 0 0 auto; margin-top:2px; color:#6580ae; }
+    .info-note strong { display:block; font-size:12px; margin-bottom:6px; }
+    .info-note p { color:#64748b; line-height:1.85; font-size:12px; margin:0; }
+    .footer { color:#a0abbb; font-size:11px; padding-top:25px; text-align:center; }
+    svg { display:block; }
+    @media (max-width:730px) {
+      .container { padding:0 18px; }
+      .topbar { height:64px; }
+      .brand-tag { display:none; }
+      main { padding:35px 0 50px; }
+      .intro { margin:12px 0 20px; font-size:13px; }
+      .permission-grid { grid-template-columns:1fr; gap:14px; }
+      .panel-main { padding:21px; }
+      .panel-desc { min-height:0; }
+      .result { padding:16px 21px 20px; }
+      .section-hint { display:none; }
+      .diagnostics-top { padding:17px; align-items:flex-start; flex-wrap:wrap; }
+      .log-area { padding:12px 17px 16px; }
+      .info-note { padding:15px; }
+    }
+    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .primary { transition:none; } }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <div class="brand">
+        <div class="brand-icon" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.4"/><rect x="14" y="3" width="7" height="7" rx="1.4"/><rect x="3" y="14" width="7" height="7" rx="1.4"/><path d="M17.5 14v7M14 17.5h7"/></svg>
+        </div>
+        <div class="brand-name">WEBVIEW PERMISSION TEST</div>
+      </div>
+      <span class="brand-tag">QA / TEST UTILITY</span>
+    </div>
+  </header>
+
+  <main class="container">
+    <p class="eyebrow">DEVICE PERMISSION CHECK</p>
+    <h1>WebView の権限を<br>テストする</h1>
+    <p class="intro">カメラ・位置情報へのアクセスを実際にリクエストして、アプリ内 WebView の権限確認や許可・拒否後の挙動をテストできます。</p>
+    <div class="runtime" aria-label="実行環境">
+      <div class="runtime-pill"><span id="secure-dot" class="dot"></span><span class="runtime-label">接続</span><strong id="secure-text">確認中</strong></div>
+      <div class="runtime-pill"><span class="runtime-label">プロトコル</span><strong id="protocol-text">—</strong></div>
+      <div class="runtime-pill"><span class="runtime-label">カメラ API</span><strong id="camera-api-text">確認中</strong></div>
+      <div class="runtime-pill"><span class="runtime-label">位置情報 API</span><strong id="geo-api-text">確認中</strong></div>
+    </div>
+
+    <div class="section-heading">
+      <h2>権限リクエスト</h2>
+      <p class="section-hint">確認したい項目のボタンをタップしてください</p>
+    </div>
+    <div class="permission-grid">
+      <section class="panel" aria-labelledby="camera-title">
+        <div class="panel-main">
+          <div class="panel-head">
+            <div class="feature-icon" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4.5H9.8L8.3 7H5.5A2.5 2.5 0 0 0 3 9.5v8A2.5 2.5 0 0 0 5.5 20h13a2.5 2.5 0 0 0 2.5-2.5v-8A2.5 2.5 0 0 0 18.5 7h-3L14 4.5Z"/><circle cx="12" cy="13.5" r="3.5"/></svg></div>
+            <div><p class="feature-label">PERMISSION 01</p><h3 class="feature-title" id="camera-title">カメラ</h3></div>
+          </div>
+          <p class="panel-desc">カメラへのアクセスを要求します。許可された場合は、下にカメラの映像を表示します。</p>
+          <div class="status-row"><span class="status-name">実行結果</span><span class="status" id="camera-status" role="status" aria-live="polite">未確認</span></div>
+          <button type="button" id="request-camera" class="primary"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h2l1.8-2.5h8.4L18 7h2v12H4V7Z"/><circle cx="12" cy="13" r="3.5"/></svg><span>カメラの権限をリクエスト</span></button>
+        </div>
+        <div class="result">
+          <p class="result-label">CAMERA PREVIEW</p>
+          <div id="camera-preview" class="preview">
+            <div class="empty-view"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="2"/><circle cx="12" cy="12.5" r="3"/><path d="M8 6l1.5-2h5L16 6"/></svg><span>映像はここに表示されます</span></div>
+            <video id="camera-video" autoplay muted playsinline webkit-playsinline aria-label="カメラのプレビュー"></video>
+          </div>
+          <button type="button" id="stop-camera" class="secondary" disabled>カメラを停止</button>
+          <p id="camera-message" class="message" aria-live="polite">リクエストすると、許可・拒否の結果が表示されます。</p>
+        </div>
+      </section>
+
+      <section class="panel" aria-labelledby="geo-title">
+        <div class="panel-main">
+          <div class="panel-head">
+            <div class="feature-icon location" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 5.2-8 11-8 11S4 15.2 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.7"/></svg></div>
+            <div><p class="feature-label">PERMISSION 02</p><h3 class="feature-title" id="geo-title">位置情報</h3></div>
+          </div>
+          <p class="panel-desc">端末の現在地を取得します。許可された場合は、座標と取得精度を表示します。</p>
+          <div class="status-row"><span class="status-name">実行結果</span><span class="status" id="geo-status" role="status" aria-live="polite">未確認</span></div>
+          <button type="button" id="request-geo" class="primary"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21 3-8.5 18-2.8-7.7L2 10.5 21 3Z"/></svg><span>位置情報の権限をリクエスト</span></button>
+        </div>
+        <div class="result">
+          <p class="result-label">LOCATION RESULT</p>
+          <div class="geo-output">
+            <div class="value-box"><div class="value-box-label">緯度 / LATITUDE</div><div class="value-box-value" id="latitude">—</div></div>
+            <div class="value-box"><div class="value-box-label">経度 / LONGITUDE</div><div class="value-box-value" id="longitude">—</div></div>
+            <div class="value-box"><div class="value-box-label">精度 / ACCURACY</div><div class="value-box-value" id="accuracy">—</div></div>
+            <div class="value-box"><div class="value-box-label">取得時刻 / TIME</div><div class="value-box-value" id="geo-time">—</div></div>
+          </div>
+          <p class="geo-meta" id="geo-message" aria-live="polite">位置情報は画面に表示するだけで、外部送信しません。</p>
+        </div>
+      </section>
+    </div>
+
+    <section class="diagnostics" aria-labelledby="log-title">
+      <div class="diagnostics-top">
+        <div><h2 id="log-title">テストログ</h2><p class="diagnostics-caption">リクエスト・許可・拒否・エラーを時系列で記録します。</p></div>
+        <div class="log-actions"><button type="button" class="text-button" id="copy-log">ログをコピー</button><button type="button" class="text-button" id="clear-log">クリア</button></div>
+      </div>
+      <div class="log-area" id="log-area" role="log" aria-live="polite" aria-relevant="additions text"></div>
+    </section>
+
+    <aside class="info-note">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.5h.01"/></svg>
+      <div><strong>Android WebView での確認について</strong><p>HTTPS で公開したページを WebView で開いてください。アラートの表示には、Android アプリ側でカメラ・位置情報の権限処理と WebChromeClient の実装が必要な場合があります。一度許可または拒否すると、次回以降はアラートが再表示されないことがあります。</p></div>
+    </aside>
+    <div class="footer">WEBVIEW PERMISSION TEST · 動作確認専用 · 外部ライブラリ・送信 API なし</div>
+  </main>
+
+  <script>
+    (() => {
+      'use strict';
+      const $ = (id) => document.getElementById(id);
+      const secure = window.isSecureContext === true;
+      const cameraSupported = !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
+      const geoSupported = !!navigator.geolocation;
+      let cameraStream = null;
+      let requestingCamera = false;
+      let requestingGeo = false;
+      const logEntries = [];
+
+      function setStatus(id, label, type = '') {
+        const el = $(id);
+        el.textContent = label;
+        el.className = 'status' + (type ? ' ' + type : '');
+      }
+
+      function addLog(message, type = '') {
+        const timestamp = new Date().toLocaleTimeString('ja-JP', { hour12: false });
+        const entry = { timestamp, message, type };
+        logEntries.push(entry);
+        const line = document.createElement('div');
+        line.className = 'log-line' + (type ? ' ' + type : '');
+        const time = document.createElement('span');
+        time.className = 'log-time';
+        time.textContent = timestamp;
+        const text = document.createElement('span');
+        text.className = 'log-text';
+        text.textContent = message;
+        line.append(time, text);
+        $('log-area').append(line);
+        $('log-area').scrollTop = $('log-area').scrollHeight;
+      }
+
+      function stopCamera() {
+        if (!cameraStream) return;
+        cameraStream.getTracks().forEach((track) => track.stop());
+        cameraStream = null;
+        $('camera-video').srcObject = null;
+        $('camera-preview').classList.remove('active');
+        $('stop-camera').disabled = true;
+        $('camera-message').textContent = '映像を停止しました。アクセス権限自体はリセットされません。';
+        setStatus('camera-status', '許可済み・停止中', 'success');
+        addLog('カメラを停止しました（権限は維持されます）');
+      }
+
+      const cameraErrorLabels = {
+        NotAllowedError: 'アクセスが拒否されました。アプリまたはサイトの権限設定を確認してください。',
+        PermissionDeniedError: 'アクセスが拒否されました。アプリまたはサイトの権限設定を確認してください。',
+        NotFoundError: '利用できるカメラが見つかりません。',
+        DevicesNotFoundError: '利用できるカメラが見つかりません。',
+        NotReadableError: 'カメラを使用できません。他のアプリが使用中の可能性があります。',
+        TrackStartError: 'カメラを使用できません。他のアプリが使用中の可能性があります。',
+        OverconstrainedError: '指定したカメラの条件を満たせません。',
+        SecurityError: 'セキュリティ設定によりカメラにアクセスできません。',
+        AbortError: 'カメラの起動が途中で中断されました。'
+      };
+
+      async function requestCamera() {
+        if (requestingCamera) return;
+        if (cameraStream) stopCamera();
+        if (!cameraSupported) {
+          setStatus('camera-status', 'API 利用不可', 'error');
+          $('camera-message').textContent = 'getUserMedia が利用できません。HTTPS や WebView の設定を確認してください。';
+          addLog('カメラ: getUserMedia API が利用できません', 'fail');
+          return;
+        }
+        requestingCamera = true;
+        $('request-camera').disabled = true;
+        setStatus('camera-status', 'リクエスト中', 'loading');
+        $('camera-message').textContent = '権限リクエストへの応答を待っています…';
+        addLog('カメラ: 権限をリクエストしました');
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: false, video: true });
+          cameraStream = stream;
+          $('camera-video').srcObject = stream;
+          $('camera-preview').classList.add('active');
+          $('stop-camera').disabled = false;
+          setStatus('camera-status', 'アクセス許可', 'success');
+          $('camera-message').textContent = 'カメラへのアクセスに成功しました。映像を確認できます。';
+          addLog('カメラ: アクセス許可・ストリーム取得成功', 'good');
+          try {
+            await $('camera-video').play();
+          } catch (playError) {
+            $('camera-message').textContent = 'カメラへのアクセスは成功しましたが、プレビューを再生できませんでした。';
+            addLog('カメラ: プレビュー再生失敗 (' + (playError.name || 'UnknownError') + ')', 'fail');
+          }
+        } catch (error) {
+          const name = error && error.name ? error.name : 'UnknownError';
+          setStatus('camera-status', name === 'NotAllowedError' || name === 'PermissionDeniedError' ? 'アクセス拒否' : '取得失敗', 'error');
+          $('camera-message').textContent = (cameraErrorLabels[name] || 'カメラにアクセスできませんでした。') + ' [' + name + ']';
+          addLog('カメラ: ' + name + (error && error.message ? ' / ' + error.message : ''), 'fail');
+        } finally {
+          requestingCamera = false;
+          $('request-camera').disabled = false;
+        }
+      }
+
+      function requestLocation() {
+        if (requestingGeo) return;
+        if (!geoSupported) {
+          setStatus('geo-status', 'API 利用不可', 'error');
+          $('geo-message').textContent = 'Geolocation API が利用できません。HTTPS や WebView の設定を確認してください。';
+          addLog('位置情報: Geolocation API が利用できません', 'fail');
+          return;
+        }
+        requestingGeo = true;
+        $('request-geo').disabled = true;
+        setStatus('geo-status', 'リクエスト中', 'loading');
+        $('geo-message').textContent = '端末から現在地を取得しています…';
+        addLog('位置情報: 権限をリクエストしました');
+        try {
+          navigator.geolocation.getCurrentPosition(
+            (position) => {
+              requestingGeo = false;
+              $('request-geo').disabled = false;
+              setStatus('geo-status', '取得成功', 'success');
+              $('latitude').textContent = position.coords.latitude.toFixed(6);
+              $('longitude').textContent = position.coords.longitude.toFixed(6);
+              $('accuracy').textContent = Math.round(position.coords.accuracy) + ' m';
+              $('geo-time').textContent = new Date(position.timestamp).toLocaleTimeString('ja-JP', {hour12: false});
+              $('geo-message').textContent = '現在地を取得しました。位置情報はサーバーへ送信しません。';
+              addLog('位置情報: 取得成功（精度 ±' + Math.round(position.coords.accuracy) + ' m）', 'good');
+            },
+            (error) => {
+              requestingGeo = false;
+              $('request-geo').disabled = false;
+              const labels = {1: '位置情報の利用が拒否されました。', 2: '位置情報を取得できません。端末の位置情報設定を確認してください。', 3: '位置情報の取得がタイムアウトしました。'};
+              setStatus('geo-status', error.code === 1 ? 'アクセス拒否' : '取得失敗', 'error');
+              $('geo-message').textContent = (labels[error.code] || '位置情報を取得できませんでした。') + ' [code ' + error.code + ']';
+              addLog('位置情報: code ' + error.code + ' / ' + error.message, 'fail');
+            },
+            { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 }
+          );
+        } catch (error) {
+          requestingGeo = false;
+          $('request-geo').disabled = false;
+          setStatus('geo-status', '取得失敗', 'error');
+          $('geo-message').textContent = '位置情報を要求できませんでした。' + (error.message || '');
+          addLog('位置情報: ' + (error.message || 'UnknownError'), 'fail');
+        }
+      }
+
+      async function copyLog() {
+        const data = [
+          'WebView Permission Test',
+          'URL: ' + location.href,
+          'Secure context: ' + secure,
+          'User Agent: ' + navigator.userAgent,
+          '',
+          ...logEntries.map((entry) => '[' + entry.timestamp + '] ' + entry.message)
+        ].join('\n');
+        try {
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            await navigator.clipboard.writeText(data);
+          } else {
+            const temp = document.createElement('textarea');
+            temp.value = data;
+            temp.style.position = 'fixed';
+            temp.style.left = '-9999px';
+            document.body.appendChild(temp);
+            temp.select();
+            const copied = document.execCommand('copy');
+            temp.remove();
+            if (!copied) throw new Error('copy unsupported');
+          }
+          addLog('ログをクリップボードにコピーしました', 'good');
+        } catch (_) {
+          addLog('ログのコピーに失敗しました。WebView のクリップボード設定をご確認ください。', 'fail');
+        }
+      }
+
+      $('secure-dot').className = 'dot ' + (secure ? 'ok' : 'bad');
+      $('secure-text').textContent = secure ? '安全な接続' : '安全でない接続';
+      $('protocol-text').textContent = location.protocol.replace(':', '') || '不明';
+      $('camera-api-text').textContent = cameraSupported ? '利用可能' : '利用不可';
+      $('geo-api-text').textContent = geoSupported ? '利用可能' : '利用不可';
+      $('request-camera').addEventListener('click', requestCamera);
+      $('stop-camera').addEventListener('click', stopCamera);
+      $('request-geo').addEventListener('click', requestLocation);
+      $('copy-log').addEventListener('click', copyLog);
+      $('clear-log').addEventListener('click', () => { logEntries.length = 0; $('log-area').textContent = ''; addLog('ログをクリアしました'); });
+      window.addEventListener('pagehide', () => {
+        if (cameraStream) {
+          cameraStream.getTracks().forEach((track) => track.stop());
+          cameraStream = null;
+        }
+      });
+      addLog('ページを読み込みました / ' + (secure ? '安全な接続' : '安全でない接続'));
+      if (!secure) addLog('注意: カメラ・位置情報は HTTPS でのアクセスが必要です', 'fail');
+      if (!cameraSupported) addLog('注意: getUserMedia API が利用できません', 'fail');
+      if (!geoSupported) addLog('注意: Geolocation API が利用できません', 'fail');
+    })();
+  </script>
+</body>
+</html>
